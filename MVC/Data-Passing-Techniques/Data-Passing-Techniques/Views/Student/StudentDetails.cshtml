@@ -1,0 +1,35 @@
+﻿@model Data_Passing_Techniques.ViewModels.StudentDetailsViewModel
+@{
+    Layout = null;
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@Model?.Title</title>
+</head>
+<body style="text-align:center">
+    <h1>@Model?.Title</h1>
+    <div>
+        StudentId : @Model?.Student?.StudentId
+    </div>
+    <div>
+        Name : @Model?.Student?.Name
+    </div>
+    <div>
+        Branch : @Model?.Student?.Branch
+    </div>
+    <div>
+        Gender : @Model?.Student?.Gender
+    </div>
+
+    <h1>Student Address</h1>
+    <div>
+        City : @Model?.Address?.City
+    </div>
+    <div>
+        Country : @Model?.Address?.Country
+    </div>
+    <div>
+        ZipCode : @Model?.Address?.ZipCode
+    </div>
+</body>
+</html>

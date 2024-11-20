@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+    var student = ViewBag.Student;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+</head>
+<body style="text-align:center">
+    <h1>Wellcome to @ViewBag.Title</h1>
+    <div>
+        StudentId : @student?.StudentId
+    </div>
+    <div>
+        Name : @student?.Name
+    </div>
+    <div>
+        Branch : @student?.Branch
+    </div>
+    <div>
+        Gender : @student?.Gender
+    </div>
+</body>
+</html>

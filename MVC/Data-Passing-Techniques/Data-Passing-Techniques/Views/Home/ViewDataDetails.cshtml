@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body style="text-align:center">
+    <h1>Welcome To @ViewData["Title"]</h1>
+
+    @{
+        var student = ViewData["Student"] as Data_Passing_Techniques.Models.Student;
+    }
+
+    <div>
+        StudentId : @student?.StudentId
+    </div>
+    <div>
+        Name : @student?.Name
+    </div>
+    <div>
+        Branch : @student?.Branch
+    </div>
+    <div>
+        Gender : @student?.Gender
+    </div>
+</body>
+</html>
