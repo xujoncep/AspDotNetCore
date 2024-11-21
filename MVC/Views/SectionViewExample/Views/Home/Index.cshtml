@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1>What is Section in Layout View</h1>
+<p>
+    The layout view is a shared template used to maintain a consistent look and feel across all the views in our application.
+    In ASP.NET Core MVC, sections within a Layout View provide a way to inject content from a child view into specific places in the layout.
+    This feature is useful when we want to include page-specific scripts, styles, or other elements in the layout without affecting our main content area.
+</p>
+@section RecentComments {
+    <h3>Recent Comments</h3>
+    @{
+        var comments = await CommentService.GetRecentCommentsAsync();
+        if (comments.Any())
+        {
+            <ul>
+                @foreach (var comment in comments)
+                {
+                    <li>@comment.Text - <strong>@comment.User</strong></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No recent comments.</p>
+        }
+    }
+}
