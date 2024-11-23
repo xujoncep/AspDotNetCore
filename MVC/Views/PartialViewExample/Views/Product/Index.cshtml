@@ -1,0 +1,28 @@
+﻿@model PartialViewExample.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+    ViewData["Header"] = "Product Details";
+}
+<div>
+
+    <p>Using Tag Helper</p>
+    <partial name="_ProductDetails" model="Model" view-data="ViewData" />
+
+     @* <p>Using Html.Partial</p>
+     @Html.Partial("_ProductDetails", Model, ViewData)
+
+     <p>Using Html.PartialAsync</p>
+     @await Html.PartialAsync("_ProductDetails", Model, ViewData)
+
+     <p>Using Html.RenderPartial</p>
+     @{
+         Html.RenderPartial("_ProductDetails", Model, ViewData);
+     }
+
+     <p>Using Html.RenderPartialAsync</p>
+     @{
+         await Html.RenderPartialAsync("_ProductDetails", Model, ViewData);
+     } *@
+
+</div>

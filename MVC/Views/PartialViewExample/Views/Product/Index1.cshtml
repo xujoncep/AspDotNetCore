@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PartialViewExample.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Product List</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            ProductID
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Price
+        </th>
+    </tr>
+
+    <!-- Normal loop for printing product details -->
+
+    @* @foreach (var item in Model)
+    {
+        <tr>
+            <th>
+               @item.ProductID
+            </th>
+            <th>
+               @item.Name
+            </th>
+            <th>
+                @item.Category
+            </th>
+            <th>
+                @item.Description
+            </th>
+            <th>
+                @item.Price
+            </th>
+        </tr>
+        
+    } *@
+
+    <!-- partial async for printing product details -->
+
+     @* @foreach (var item in Model)
+        {
+            @await Html.PartialAsync("_ProductDetails", item)
+        } *@
+    <!-- partial async with partial tag for printing product details -->
+    @foreach (var item in Model)
+    {
+        <partial name="_ProductDetails"  model="item"></partial>
+        @* @await Html.PartialAsync("_ProductDetails", item) *@
+    }
+</table>
+
