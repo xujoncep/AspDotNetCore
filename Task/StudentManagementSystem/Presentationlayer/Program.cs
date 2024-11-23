@@ -1,6 +1,11 @@
-using StudentManagement.Models;
+using BusinessLogicLayer.IService;
+using BusinessLogicLayer.Service;
+using DataAccessLayer.Data;
+using DataAccessLayer.IRepository;
+using DataAccessLayer.Repository;
+using Microsoft.EntityFrameworkCore;
 
-namespace StudentManagement
+namespace Presentationlayer
 {
     public class Program
     {
@@ -10,13 +15,12 @@ namespace StudentManagement
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<StudentDBContext>();
-            builder.Services.AddControllersWithViews()
-            .AddJsonOptions(options =>
-            {
-                
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;
-            });
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+              options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+
 
             var app = builder.Build();
 

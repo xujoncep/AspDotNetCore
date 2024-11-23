@@ -1,0 +1,254 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<p class="container">
+    <h2>Students Record</h2>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">
+        Add New Student
+    </button><br /><br />
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+            
+        </tbody>
+    </table>
+</p>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAddStudent" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabelAddStudent">Add Student</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateStudent">Update Student</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="Id" name="Id" />
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Age">Age</label>
+                        <input type="text" class="form-control" id="Age" placeholder="Age" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Class">Class</label>
+                        <input type="text" class="form-control" id="Class" placeholder="Class" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Add Student</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="return Update();">Update</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure you want to delete the following Student?
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="HiddenStudentId" name="HiddenId" />
+                <label id="labelToUpdateName" style="display: block; text-align: center;"></label><br />
+                <label id="labelToUpdateClass" style="display: block; text-align: center;"></label><br />
+                <label id="labelToUpdateAge" style="display: block; text-align: center;"></label><br />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="return Delete();">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins and AJAX) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Load Data in Table when document is ready
+    $(document).ready(function () {
+        loadData();
+    });
+
+    // Load Data function
+    function loadData() {
+        $.ajax({
+            url: '/Student/GetAll',
+            type: 'GET',
+            success: function (result) {
+                var html = '';
+                $.each(result.data, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.Id + '</td>';
+                    html += '<td>' + item.Name + '</td>';
+                    html += '<td>' + item.Age + '</td>';
+                    html += '<td>' + item.Class + '</td>';
+                    html += '<td><a href="#" class="btn btn-primary" onclick="return getbyID(' + item.Id + ')">Edit</a>  <a href="#" class="btn btn-danger" onclick="ConfirmDelete(' + item.Id + ')">Delete</a></td>';
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    // Add Employee Data Function
+    function Add() {
+
+        var student = {
+            StudentID: $('#Id').val(),
+            Name: $('#Name').val(),
+            Age: $('#Age').val(),
+            Class: $('#Class').val()
+        };
+        $.ajax({
+            url: '@Url.Action("AddStudent", "Student")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(student),
+            success: function (result) {
+                loadData();
+                $('#myModal').modal('hide');
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    // Function for getting the Data Based upon Employee ID
+    function getbyID(stID) {
+        $('#Name').css('border-color', 'lightgrey');
+        $('#Age').css('border-color', 'lightgrey');
+        $('#Class').css('border-color', 'lightgrey');
+        $.ajax({
+            url: "/Student/GetById/" + stID,
+            type: "GET",
+            contentType: 'application/json',
+            success: function (result) {
+
+                $('#Id').val(result.data.Id);
+                $('#Name').val(result.data.Name);
+                $('#Age').val(result.data.Age);
+                $('#Class').val(result.data.Class);
+
+                $('#myModal').modal('show');
+                $('#btnUpdate').show();
+                $('#btnAdd').hide();
+                $('#myModalLabelAddStudent').hide();
+                $('#myModalLabelUpdateStudent').show();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+        return false;
+    }
+
+    // Function for updating employee's record
+    function Update() {
+
+        var student = {
+            Id: $('#Id').val(),
+            Name: $('#Name').val(),
+            Salary: $('#Age').val(),
+            Department: $('#Class').val(),
+        };
+        $.ajax({
+            url: '@Url.Action("UpdateStudent", "Student")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(student),
+            success: function (result) {
+                loadData();
+                $('#myModal').modal('hide');
+                $('#Id').val("");
+                $('#Name').val("");
+                $('#Age').val("");
+                $('#Class').val("");
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    // Function for showing the Popup before deletion
+    function ConfirmDelete(stID) {
+
+        $.ajax({
+            url: "/Student/GetById/" + stID,
+            type: "GET",
+            contentType: 'application/json',
+            success: function (result) {
+                $("#labelToUpdateName").html("<b>Name: </b>" + result.data.Name);
+                $("#labelToUpdateClass").html("<b>Class: </b>" + result.data.Class);
+                $("#labelToUpdateAge").html("<b>Age: </b>" + result.data.Age);
+
+                $('#HiddenStudentId').val(stID);
+                $('#deleteConfirmationModal').modal('show');
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    // Function for deleting the Employee
+    function Delete() {
+
+        var ID = $('#HiddenStudentId').val();
+
+        $.ajax({
+            url: "/Student/DeleteStudent/" + ID,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (result) {
+                loadData();
+                $('#deleteConfirmationModal').modal('hide');
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    // Function for clearing the textboxes
+    function clearTextBox() {
+        $('#Id').val("");
+        $('#Name').val("");
+        $('#Age').val("");
+        $('#Class').val("");
+        $('#btnUpdate').hide();
+        $('#btnAdd').show();
+        $('#Name').css('border-color', 'lightgrey');
+        $('#Age').css('border-color', 'lightgrey');
+        $('#Class').css('border-color', 'lightgrey');
+    }
+</script>
