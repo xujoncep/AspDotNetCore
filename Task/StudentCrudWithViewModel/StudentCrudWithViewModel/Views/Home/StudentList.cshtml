@@ -1,0 +1,41 @@
+﻿@model IEnumerable<StudentCrudWithViewModel.Models.Student>
+
+@{
+    ViewData["Title"] = "StudentList";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-10 offset-1">
+
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Student Id</th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Class</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model)
+                    {
+                       <tr>
+                            <td>@item.StudentId</td>
+                            <td>@item.Name</td>
+                            <td>@item.Age</td>
+                            <td>@item.Class</td>
+                    </tr>  
+                    }
+                   
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,45 @@
+﻿@model StudentCrudWithViewModel.ViewModels.StudentInfoViewModel
+
+@{
+    ViewData["Title"] = "StudentInformation";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-10 offset-1">
+            <h2>This is the full information Using View View Model</h2>
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Student Id</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Class</th>
+                        <th>City</th>
+                        <th>Region</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Students)
+                    {
+                        <tr>
+                            <td>@item.StudentId</td>
+                            <td>@item.Name</td>
+                            <td>@item.Age</td>
+                            <td>@item.Class</td>
+                            <td>@item.Address.City</td>
+                            <td>@item.Address.Region</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

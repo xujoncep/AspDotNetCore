@@ -1,11 +1,6 @@
-using BusinessLogicLayer.IService;
-using BusinessLogicLayer.Service;
-using DataAccessLayer.Data;
-using DataAccessLayer.IRepository;
-using DataAccessLayer.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace Presentationlayer
+namespace StudentCrudWithViewModel
 {
     public class Program
     {
@@ -15,13 +10,8 @@ namespace Presentationlayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-            builder.Services.AddScoped<IStudentService, StudentService>();
-
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<Data.AppDbContext>(options =>
               options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-
 
             var app = builder.Build();
 

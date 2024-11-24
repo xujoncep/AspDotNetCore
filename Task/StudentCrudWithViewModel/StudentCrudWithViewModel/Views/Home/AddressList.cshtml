@@ -1,0 +1,38 @@
+﻿@model IEnumerable<StudentCrudWithViewModel.Models.Address>
+@{
+    ViewData["Title"] = "AddressList";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-10 offset-1">
+
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Address Id</th>
+                        <th>City</th>
+                        <th>Region</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.AddressId</td>
+                            <td>@item.City</td>
+                            <td>@item.Region</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
