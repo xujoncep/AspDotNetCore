@@ -1,11 +1,11 @@
-﻿@model IEnumerable<DataAccessLayer.Entites.Student>
+﻿@model IEnumerable<DataAccessLayer.ViewModels.StudentViewModel>
 
 @{
     ViewData["Title"] = "Student List";
 }
 
-<h2>Student List</h2>
-<a class="btn btn-primary" asp-action="Create">Add New Student</a>
+<h2 class="text-center">Student List</h2>
+<a class="btn btn-primary float-end" asp-action="Create">Add New Student</a>
 
 <table class="table table-striped mt-3">
     <thead>

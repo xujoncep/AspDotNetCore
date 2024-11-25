@@ -89,6 +89,38 @@ namespace StudentCrudWithViewModel.Controllers
 
             return View(info);
         }
+
+        [HttpGet]
+        public IActionResult CreateStudentList()
+        {   
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateStudentList(Student model)
+        {
+            if (ModelState.IsValid)
+            {
+                var student = new Student()
+                {
+                    Name = model.Name,
+                    Age = model.Age,
+                    Class = model.Class,
+                };
+
+                _context.Students.Add(student);
+                _context.SaveChanges();
+                return RedirectToAction("StudentList");
+
+            }
+            else
+            {
+                TempData["error"] = "Empty field!";
+                return View(model);
+            }
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

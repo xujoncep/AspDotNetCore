@@ -1,5 +1,6 @@
 ﻿using BusinessLogicLayer.IService;
 using DataAccessLayer.Entites;
+using DataAccessLayer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentationlayer.Controllers
@@ -16,14 +17,27 @@ namespace Presentationlayer.Controllers
         public async Task<IActionResult> Index()
         {
             var students = await _studentService.GetStudentsAsync();
-            return View(students);
+            var studentViewModels = students.Select(s => new StudentViewModel
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Class = s.Class,
+            }).ToList();
+            return View(studentViewModels);
         }
 
         public async Task<IActionResult> Details(int id)
         {
             var student = await _studentService.GetStudentByIdAsync(id);
             if (student == null) return NotFound();
-            return View(student);
+
+            var studentViewModel = new StudentViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+                Class = student.Class,
+            };
+            return View(studentViewModel);
         }
 
         [HttpGet]
@@ -33,14 +47,21 @@ namespace Presentationlayer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Student student)
+        public async Task<IActionResult> Create(StudentViewModel studentViewModel)
         {
             if (ModelState.IsValid)
             {
+                var student = new Student 
+                { 
+                 Name= studentViewModel.Name,
+                 Class = studentViewModel.Class,
+                
+                };
+
                 await _studentService.AddStudentAsync(student);
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(studentViewModel);
         }
 
         [HttpGet]
@@ -48,18 +69,31 @@ namespace Presentationlayer.Controllers
         {
             var student = await _studentService.GetStudentByIdAsync(id);
             if (student == null) return NotFound();
-            return View(student);
+            var studentViewModel = new StudentViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+                Class = student.Class,
+            };
+
+            return View(studentViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Student student)
+        public async Task<IActionResult> Edit(StudentViewModel studentViewModel)
         {
             if (ModelState.IsValid)
             {
+                var student = new Student
+                {
+                    Id = studentViewModel.Id,
+                    Name = studentViewModel.Name,
+                    Class = studentViewModel.Class
+                };
                 await _studentService.UpdateStudentAsync(student);
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(studentViewModel);
         }
 
         [HttpGet]
@@ -67,7 +101,13 @@ namespace Presentationlayer.Controllers
         {
             var student = await _studentService.GetStudentByIdAsync(id);
             if (student == null) return NotFound();
-            return View(student);
+            var studentViewModel = new StudentViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+                Class = student.Class
+            };
+            return View(studentViewModel);
         }
 
         [HttpPost]

@@ -7,7 +7,8 @@
 <div class="container">
     <div class="row">
         <div class="col-10 offset-1">
-
+            <h2 class="text-center">Student Record</h2> 
+            <a class="btn btn-sm btn-success" asp-controller="Home" asp-action="CreateStudentList">Add Student</a>
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
@@ -26,6 +27,11 @@
                             <td>@item.Name</td>
                             <td>@item.Age</td>
                             <td>@item.Class</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" asp-action="" asp-controller="" asp-route-id="">Edit</a>
+                                <a class="btn btn-sm btn-info" asp-action="" asp-controller="" asp-route-id="">Details</a>
+                                <a class="btn btn-sm btn-danger" asp-action="" asp-controller="" asp-route-id="">Delete</a>
+                            </td>
                     </tr>  
                     }
                    

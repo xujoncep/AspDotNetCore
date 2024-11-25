@@ -17,6 +17,11 @@ namespace BusinessLogicLayer.Service
         {
             _studentRepository = studentRepository;
         }
+
+        //public int NotPossible() //Question
+        //{
+        //    return 1;
+        //}
         public async Task<IEnumerable<Student>> GetStudentsAsync()
         {
             return await _studentRepository.GetStudentsAsync();
