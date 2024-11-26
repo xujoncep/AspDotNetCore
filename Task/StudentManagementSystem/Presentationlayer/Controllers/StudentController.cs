@@ -53,8 +53,8 @@ namespace Presentationlayer.Controllers
             {
                 var student = new Student 
                 { 
-                 Name= studentViewModel.Name,
-                 Class = studentViewModel.Class,
+                     Name= studentViewModel.Name,
+                     Class = studentViewModel.Class,
                 
                 };
 

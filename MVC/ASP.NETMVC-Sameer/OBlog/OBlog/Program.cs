@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using OBlog.Data;
+
 namespace OBlog
 {
     public class Program
@@ -8,6 +11,10 @@ namespace OBlog
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            //Injecting dbcontext into services
+            builder.Services.AddDbContext<BlogDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnectionString")));
 
             var app = builder.Build();
 
