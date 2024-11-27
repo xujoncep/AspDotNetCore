@@ -4,24 +4,49 @@
     ViewData["Title"] = "Edit Student";
 }
 
-<h2>Edit Student</h2>
+<h2 class="text-center fw-bold mb-3">Edit Student Information</h2>
+
 <form asp-action="Edit" method="post">
     <div class="form-group">
         <label for="Id">Id</label>
         <input class="form-control" asp-for="Id" readonly/>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <br />
     <div class="form-group">
         <label for="Name">Name</label>
         <input class="form-control" asp-for="Name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <br />
     <div class="form-group">
         <label for="Class">Class</label>
         <input class="form-control" asp-for="Class" />
         <span asp-validation-for="Class" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-danger">Update</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    <br />
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="Phone">Phone</label>
+        <input class="form-control" asp-for="Phone" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="Bio">Bio</label>
+        <input class="form-control" asp-for="Bio" />
+        <span asp-validation-for="Bio" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-danger me-3">Update</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    </div>
+   
 
 </form>

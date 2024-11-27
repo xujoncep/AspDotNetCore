@@ -7,15 +7,37 @@
 <h2>Create Student</h2>
 <form asp-action="Create" method="post">
     <div class="form-group">
-        <label for="Name">Name</label>
-        <input class="form-control" asp-for="Name" />
+        <label class="fw-bold" asp-for="Name"></label>
+        <input class="form-control" asp-for="Name" placeholder="Enter your full name." autocomplete="off" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <br />
     <div class="form-group">
-        <label for="Class">Class</label>
-        <input class="form-control" asp-for="Class" />
+        <label class="fw-bold" asp-for="Class"></label>
+        <input class="form-control" asp-for="Class" placeholder="Enter your class." autocomplete="off" />
         <span asp-validation-for="Class" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <br />
+    <div class="form-group">
+        <label class="fw-bold" asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" placeholder="Enter your mail address." autocomplete="off"/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <label class="fw-bold" asp-for="Phone"></label>
+        <input class="form-control" asp-for="Phone" placeholder="Enter your active phone number." autocomplete="off" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <label class="fw-bold" asp-for="Bio"></label>
+        <input class="form-control" asp-for="Bio" placeholder="Enter your biography(optional)" autocomplete="off" />
+        <span asp-validation-for="Bio" class="text-danger"></span>
+    </div> 
+    <br />
+    <button type="submit" class="btn btn-danger">Create</button>
+    <a class="btn btn-secondary" asp-action="Index">Back</a>
 </form>
-<a class="btn btn-secondary" asp-action="Index">Back</a>
+

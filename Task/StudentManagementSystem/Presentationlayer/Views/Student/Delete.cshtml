@@ -23,10 +23,26 @@
         <th>Class</th>
         <td>@Model.Class</td>
     </tr>
+    <tr>
+        <th>Class</th>
+        <td>@Model.Email</td>
+    </tr>
+    <tr>
+        <th>Class</th>
+        <td>@Model.Phone</td>
+    </tr>
+    <tr>
+        <th>Class</th>
+        <td>@Model.Bio</td>
+    </tr>
 </table>
 <form asp-action="DeleteConfirmed" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-danger me-3">Delete</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+
+    </div>
+    
 </form>
 

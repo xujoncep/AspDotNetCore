@@ -23,7 +23,7 @@ namespace DataAccessLayer.Repository
             return await _dbcontext.Students.ToListAsync();
         }
 
-        public async Task<Student> GetStudentByIdAsync(int id)
+        public async Task<Student> GetStudentByIdAsync(Guid id)
         {
             return await _dbcontext.Students.FirstOrDefaultAsync(s => s.Id == id);
         }
@@ -40,7 +40,7 @@ namespace DataAccessLayer.Repository
             await _dbcontext.SaveChangesAsync();
         }
 
-        public async Task DeleteStudentAsync(int id)
+        public async Task DeleteStudentAsync(Guid id)
         {
             var student = await _dbcontext.Students.FindAsync(id);
             if (student != null)
@@ -48,6 +48,11 @@ namespace DataAccessLayer.Repository
                 _dbcontext.Students.Remove(student);
                 await _dbcontext.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> IsEmailExistsAsync(string email)
+        {
+            return await _dbcontext.Students.AnyAsync(u => u.Email == email);
         }
     }
 }

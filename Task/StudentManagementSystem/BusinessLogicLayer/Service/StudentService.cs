@@ -27,7 +27,7 @@ namespace BusinessLogicLayer.Service
             return await _studentRepository.GetStudentsAsync();
         }
 
-        public async Task<Student> GetStudentByIdAsync(int id)
+        public async Task<Student> GetStudentByIdAsync(Guid id)
         {
             return await _studentRepository.GetStudentByIdAsync(id);
         }
@@ -42,9 +42,14 @@ namespace BusinessLogicLayer.Service
             await _studentRepository.UpdateStudentAsync(student);
         }
 
-        public async Task DeleteStudentAsync(int id)
+        public async Task DeleteStudentAsync(Guid id)
         {
             await _studentRepository.DeleteStudentAsync(id);
+        }
+
+        public async Task<bool> IsEmailExistsAsync(string email)
+        {
+            return await _studentRepository.IsEmailExistsAsync(email);
         }
     }
 }
