@@ -1,0 +1,41 @@
+﻿@model DifferentForm.Models.Gendar
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="form-group">
+    <!-- Label for the Departments dropdown -->
+    <label for="Departments" class="form-label">Select Department</label>
+    <!-- Dropdown list with Bootstrap styling -->
+    @Html.DropDownList("Departments", new List<SelectListItem>
+    {
+    new SelectListItem { Text = "IT", Value = "1"},
+    new SelectListItem { Text = "HR", Value = "2"},
+    new SelectListItem { Text = "Payroll", Value = "3"}
+    }, "Select Department", new { @class = "form-control" })
+</div>
+<br />
+
+<select id="Departments" name="Departments" class="form-control">
+    <option value="">Select Department</option>
+    <option value="1">IT</option>
+    <option value="2">HR</option>
+    <option value="3">Payroll</option>
+</select>
+
+<br />
+
+<div class="form-group">
+    <label for="Gendar" class="form-label">Select Gender</label>
+    @Html.DropDownList("Gender", 
+            new SelectList(Enum.GetValues(typeof(Gendar))), 
+            "Select Gendar",
+            new { @class = "form-control" } 
+            )
+</div>

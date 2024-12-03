@@ -27,9 +27,8 @@ public class Program
         //app.MapDefaultControllerRoute();
         //app.MapGet("/", () => "Hello World!");
         app.MapControllerRoute(
-                name: "default", // Name of the route
-                pattern: "{controller=Home}/{action=Index}/{id?}" // URL pattern for the route
-            );
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
         app.Run();
 

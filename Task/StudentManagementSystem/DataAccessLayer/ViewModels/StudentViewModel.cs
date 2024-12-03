@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -23,8 +24,6 @@ namespace DataAccessLayer.ViewModels
         [DisplayName("Acadamic Class")]
         public string Class { get; set; }
 
-        //[EmailAddress]
-        //[Remote(action: "IsEmailAvailable", controller: "Student", ErrorMessage = "Email is already taken.")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage ="Maintain format user@example.com")]
         [DisplayName("Email Address")]
         [Required(ErrorMessage = "Email is Required!")]

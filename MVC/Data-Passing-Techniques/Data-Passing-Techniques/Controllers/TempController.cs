@@ -19,8 +19,8 @@ namespace Data_Passing_Techniques.Controllers
 
         public IActionResult HomeSecond()
         {
-            TempData.Keep("Name");
-            TempData.Keep("Age");
+            //TempData.Keep("Name");
+            //TempData.Keep("Age");
 
             return View();
         }

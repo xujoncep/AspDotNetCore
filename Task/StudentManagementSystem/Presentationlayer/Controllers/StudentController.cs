@@ -15,6 +15,13 @@ namespace Presentationlayer.Controllers
         {
             _studentService = studentService;  
         }
+
+        public IActionResult Data()
+        {
+            TempData["message"] = "This is tempdata";
+            TempData.Keep();
+            return View();
+        }
         public async Task<IActionResult> Index()
         {
             var students = await _studentService.GetStudentsAsync();
@@ -135,16 +142,5 @@ namespace Presentationlayer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        [AcceptVerbs("GET", "POST")]
-        public async Task<IActionResult> IsEmailAvailable(string email)
-        {
-            if (await _studentService.IsEmailExistsAsync(email))
-            {
-                return Json($"The email {email} is already in use.");
-            }
-
-            return Json(true);
-        }
     }
 }

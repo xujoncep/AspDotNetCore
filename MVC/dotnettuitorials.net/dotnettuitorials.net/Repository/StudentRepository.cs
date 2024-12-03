@@ -7,7 +7,7 @@ namespace dotnettuitorials.net.Repository
 
         public StudentRepository() 
         {
-            string filePath = @"D:\C#\MVC\dotnettuitorials.net\dotnettuitorials.net\Log\Log.txt";
+            string filePath = @"D:\DotNet\MVC\dotnettuitorials.net\dotnettuitorials.net\Log\Log.txt";
             string contentToWrite = $"StudentRepository Object Created: @{DateTime.Now.ToString()}";
             using (StreamWriter writer = new StreamWriter(filePath, true))
             {

@@ -13,7 +13,7 @@ namespace dotnettuitorials.net.Controllers
             _repository = repository;
             _someOtherService = someOtherService;
         }
-        public JsonResult Index()
+        public JsonResult JsonIndex()
         {
             List<Student>? allStudentDetails = _repository?.GetAllStudents();
             _someOtherService?.SomeMethod();
@@ -25,9 +25,9 @@ namespace dotnettuitorials.net.Controllers
             _someOtherService?.SomeMethod();
             return Json(studentDetails);
         }
-        public string OldIndex()
+       public IActionResult Index()
         {
-            return "This is Index action from MVC Controller";
+            return View();
         }
     }
 }
