@@ -20,7 +20,8 @@ namespace MvcMovie.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
+            //return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
