@@ -26,6 +26,7 @@ namespace MvcMovie.Controllers
             {
                 return Problem("Entity set Context is null here");
             }
+            
             IQueryable<string> genreQuery = from m in _context.Movie
                                             orderby m.Genre
                                             select m.Genre;
