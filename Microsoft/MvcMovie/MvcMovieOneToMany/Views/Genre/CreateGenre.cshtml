@@ -1,0 +1,27 @@
+﻿@model MvcMovieOneToMany.Models.Genre
+@{
+    ViewData["Title"] = "CreateGenre";
+}
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Welcome to Genre List Section</h1>
+</div>
+
+<div>
+    >
+    <div class="row">
+        <div class="col-6 offset-2">
+            <form method="post" asp-action="CreateGenre">
+                <div class="form-group">
+                    <label asp-for="GenreName"></label>
+                    <input type="text" asp-for="GenreName" class="form-control" placeholder="Enter Genre Name" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-success" />
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>

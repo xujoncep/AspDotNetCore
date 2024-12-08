@@ -1,31 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using MvcMovie.Data;
-using MvcMovie.Models;
-namespace MvcMovie
+using Microsoft.EntityFrameworkCore;
+using MvcMovieOneToMany.Data;
+
+namespace MvcMovieOneToMany
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-           
-            builder.Services.AddDbContext<MvcMovieContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieContext")));
+
+            builder.Services.AddDbContext<MovieDbContext>(options => 
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieOneToManyContext")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
-
-            //data seeding 
-
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                SeedData.Initialize(services);
-            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

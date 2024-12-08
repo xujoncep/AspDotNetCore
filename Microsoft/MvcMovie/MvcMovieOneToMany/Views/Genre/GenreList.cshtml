@@ -1,0 +1,38 @@
+﻿@model List<MvcMovieOneToMany.Models.Genre>
+@{
+    ViewData["Title"] = "GenreList";
+}
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Welcome to Genre List Section</h1>
+</div>
+<div>
+    <a asp-action="CreateGenre" class="btn btn-info">Add New</a>
+</div>
+<div class="container py-5">
+
+    @if(Model != null)
+    {
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Genre Id</th>
+                    <th>Genre Name</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+            
+              @foreach(var item in Model) 
+              {
+                  <tr>
+                        <td>@item.GenreId</td>
+                        <td>@item.GenreName</td>
+                  </tr>
+            
+              }
+            </tbody>
+        </table>
+    }
+
+</div>
