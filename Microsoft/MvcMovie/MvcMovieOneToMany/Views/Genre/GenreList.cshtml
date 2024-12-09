@@ -5,18 +5,23 @@
 <div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
     <h1>Welcome to Genre List Section</h1>
 </div>
-<div>
-    <a asp-action="CreateGenre" class="btn btn-info">Add New</a>
-</div>
-<div class="container py-5">
+
+    
+<p class="align-items-md-start mt-2">
+    <a asp-controller="Genre" asp-action="CreateGenre" class="btn btn-info">Add New Genre</a>
+</p>
+
+
+<div class="container ">
 
     @if(Model != null)
     {
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover text-center">
             <thead>
                 <tr>
                     <th>Genre Id</th>
                     <th>Genre Name</th>
+                    <th>Action</th>
 
                 </tr>
             </thead>
@@ -28,6 +33,11 @@
                   <tr>
                         <td>@item.GenreId</td>
                         <td>@item.GenreName</td>
+                        <td>
+                            <a asp-action="EditGenre" asp-route-id="@item.GenreId" class="btn btn-secondary">Update</a>
+                            <a asp-action="DeleteGenre" asp-route-id="@item.GenreId" class="btn btn-danger">Delete</a>
+
+                        </td>
                   </tr>
             
               }

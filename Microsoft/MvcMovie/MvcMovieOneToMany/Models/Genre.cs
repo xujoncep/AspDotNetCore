@@ -10,9 +10,10 @@ namespace MvcMovieOneToMany.Models
         public Guid GenreId { get; set; }
 
         [ Display(Name ="Genre Name")]
-        public string GenreName { get; set; }
+        public string? GenreName { get; set; }
 
-        [ForeignKey("MovieId")]
-        public Movie Movie { get; set; }
+        //Navigation Property
+        public ICollection<Movie>? Movies { get; set; }
+
     }
 }

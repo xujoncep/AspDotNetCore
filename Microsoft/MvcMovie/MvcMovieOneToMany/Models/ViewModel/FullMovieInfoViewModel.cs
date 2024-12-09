@@ -9,7 +9,7 @@ namespace MvcMovieOneToMany.Models.ViewModel
 
         public string Title { get; set; } 
 
-        public string Genre { get; set; }
+        public List<Genre> GenreList { get; set; }
 
         [DisplayName("Release Date")]
         [DataType(DataType.Date)]

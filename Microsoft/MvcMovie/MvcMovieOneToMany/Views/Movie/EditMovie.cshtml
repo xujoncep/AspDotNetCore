@@ -1,0 +1,40 @@
+﻿@model MvcMovieOneToMany.Models.Movie
+@{
+    ViewData["Title"] = "EditMovie";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Welcome to Edit Movie Section</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditMovie">
+
+            <div class="form-group">
+                <label asp-for="MovieId" class="form-label"></label>
+                <input asp-for="MovieId" class="form-control" readonly />
+                <span asp-validation-for="MovieId" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="GenreId" class="control-label"></label>
+                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
+                <span asp-validation-for="GenreId" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="MovieList" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>

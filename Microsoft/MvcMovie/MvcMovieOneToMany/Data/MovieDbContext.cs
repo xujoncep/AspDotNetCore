@@ -11,8 +11,17 @@ namespace MvcMovieOneToMany.Data
             
         }
         public DbSet<Genre> Genres { get; set; }
-        DbSet<Movie> Movies { get; set; }
-        DbSet<MovieDetails> MoviesDetails { get; set; }
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<MovieDetails> MoviesDetails { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Genre>()
+                .HasMany(m => m.Movies)
+                .WithOne(g => g.Genre)
+                .HasForeignKey(g => g.GenreId);
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }

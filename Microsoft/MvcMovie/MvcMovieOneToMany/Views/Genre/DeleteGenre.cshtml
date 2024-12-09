@@ -1,0 +1,21 @@
+﻿@model MvcMovieOneToMany.Models.Genre
+@{
+    ViewData["Title"] = "DeleteGenre";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Welcome to Delete Genre Section</h1>
+</div>
+
+<div class="fw-bold text-center text-danger">
+    <h2>Genre Name: @TempData["GenreName"]</h2>
+    <h2>Are you sure to delete this Genre?</h2>
+</div>
+
+
+<form asp-action="DeleteGenre">
+
+    <input type="submit" value="Delete" class="btn btn-danger"  />
+    <a asp-action="GenreList" class="btn btn-primary">Back to List</a>
+
+</form>

@@ -6,6 +6,7 @@ namespace MvcMovieOneToMany.Models
 {
     public class MovieDetails
     {
+        [Key]
         public Guid MovieDetailsId { get; set; }
 
        
@@ -16,7 +17,5 @@ namespace MvcMovieOneToMany.Models
 
         public string Rating { get; set; }
 
-        public Guid MovieId { get; set; }
-        public Movie Movie { get; set; }
     }
 }

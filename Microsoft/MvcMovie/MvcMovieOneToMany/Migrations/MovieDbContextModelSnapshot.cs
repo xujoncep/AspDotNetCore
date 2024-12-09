@@ -32,13 +32,7 @@ namespace MvcMovieOneToMany.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("GenreId");
-
-                    b.HasIndex("MovieId")
-                        .IsUnique();
 
                     b.ToTable("Genres");
                 });
@@ -52,14 +46,13 @@ namespace MvcMovieOneToMany.Migrations
                     b.Property<Guid>("GenreId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MovieDetailsId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MovieId");
+
+                    b.HasIndex("GenreId");
 
                     b.ToTable("Movies");
                 });
@@ -73,52 +66,32 @@ namespace MvcMovieOneToMany.Migrations
                     b.Property<decimal>("Income")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
+                    b.Property<string>("Rating")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("MovieDetailsId");
 
-                    b.HasIndex("MovieId")
-                        .IsUnique();
-
                     b.ToTable("MoviesDetails");
-                });
-
-            modelBuilder.Entity("MvcMovieOneToMany.Models.Genre", b =>
-                {
-                    b.HasOne("MvcMovieOneToMany.Models.Movie", "Movie")
-                        .WithOne("Genre")
-                        .HasForeignKey("MvcMovieOneToMany.Models.Genre", "MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("MvcMovieOneToMany.Models.MovieDetails", b =>
-                {
-                    b.HasOne("MvcMovieOneToMany.Models.Movie", "Movie")
-                        .WithOne("MovieDetails")
-                        .HasForeignKey("MvcMovieOneToMany.Models.MovieDetails", "MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("MvcMovieOneToMany.Models.Movie", b =>
                 {
-                    b.Navigation("Genre")
+                    b.HasOne("MvcMovieOneToMany.Models.Genre", "Genre")
+                        .WithMany("Movies")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MovieDetails")
-                        .IsRequired();
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("MvcMovieOneToMany.Models.Genre", b =>
+                {
+                    b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
         }

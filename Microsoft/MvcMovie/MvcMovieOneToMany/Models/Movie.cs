@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcMovieOneToMany.Models
 {
@@ -9,10 +10,11 @@ namespace MvcMovieOneToMany.Models
 
         public string Title { get; set; }
 
+
+        [ForeignKey("GenreId")]
         public Guid GenreId { get; set; }
 
-        public Guid MovieDetailsId { get; set; }
-        public Genre Genre { get; set; }
-        public MovieDetails MovieDetails { get; set; }
+        public Genre Genre { get; set; } //Navigational property
+
     }
 }

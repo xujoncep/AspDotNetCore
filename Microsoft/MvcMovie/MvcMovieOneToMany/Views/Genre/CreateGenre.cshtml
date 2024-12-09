@@ -3,11 +3,10 @@
     ViewData["Title"] = "CreateGenre";
 }
 <div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
-    <h1>Welcome to Genre List Section</h1>
+    <h1>Welcome to Create Genre  Section</h1>
 </div>
 
 <div>
-    >
     <div class="row">
         <div class="col-6 offset-2">
             <form method="post" asp-action="CreateGenre">
@@ -15,8 +14,9 @@
                     <label asp-for="GenreName"></label>
                     <input type="text" asp-for="GenreName" class="form-control" placeholder="Enter Genre Name" />
                 </div>
+                <br />
                 <div class="form-group">
-                    <input type="submit" value="Submit" class="btn btn-success" />
+                    <input type="submit" value="Create" class="btn btn-success" />
                 </div>
 
             </form>
