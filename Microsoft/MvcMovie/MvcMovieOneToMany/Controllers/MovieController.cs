@@ -135,7 +135,7 @@ namespace MvcMovieOneToMany.Controllers
             {
                 return NotFound();
             }
-            var movie = await _context.Movies.FirstOrDefaultAsync(g => g.MovieId == id);
+            var movie = await _context.Movies.Include(m => m.Genre).FirstOrDefaultAsync(g => g.MovieId == id);
 
             if (movie == null)
             {

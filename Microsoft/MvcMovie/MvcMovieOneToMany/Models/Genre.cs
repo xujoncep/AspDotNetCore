@@ -11,7 +11,10 @@ namespace MvcMovieOneToMany.Models
 
         [ Display(Name ="Genre Name")]
         public string? GenreName { get; set; }
-        public ICollection<Movie>? Movies { get; set; }
+        
+        //public ICollection<Movie>? Movies { get; set; }
+        //public List<Movie>? Movies { get;set; }
+        public IEnumerable<Movie>? Movies { get; set; }
 
     }
 }
