@@ -1,10 +1,16 @@
-namespace DifferentForm
+using FluentApi.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace FluentApi
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<FluentApiDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("RelationDbContext")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

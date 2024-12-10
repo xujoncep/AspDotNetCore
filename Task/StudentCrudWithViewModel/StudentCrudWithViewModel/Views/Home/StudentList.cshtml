@@ -3,13 +3,19 @@
 @{
     ViewData["Title"] = "StudentList";
 }
+<div class="text-center fw-bold bg-secondary bg-opacity-25 py-3">
+    <h2 class="text-center">All Student Record</h2>
+</div>
+
+<div class="py-2 fw-bold">
+    <a class="btn btn-sm btn-secondary" asp-controller="Home" asp-action="CreateStudentList">Add New Student</a>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col-10 offset-1">
-            <h2 class="text-center">Student Record</h2> 
-            <a class="btn btn-sm btn-success" asp-controller="Home" asp-action="CreateStudentList">Add Student</a>
-            <table class="table table-bordered text-center">
+        <div class="col-12">
+            
+            <table class="table table-bordered text-center table-hover table-striped">
                 <thead>
                     <tr>
                         <th>Student Id</th>

@@ -1,4 +1,4 @@
-namespace DifferentForm.Models
+namespace FluentApi.Models
 {
     public class ErrorViewModel
     {

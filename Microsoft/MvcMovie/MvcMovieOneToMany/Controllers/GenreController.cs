@@ -93,6 +93,7 @@ namespace MvcMovieOneToMany.Controllers
             {
                 return NotFound();
             }
+            
             TempData["GenreName"] = genre.GenreName;
 
             return View(genre);

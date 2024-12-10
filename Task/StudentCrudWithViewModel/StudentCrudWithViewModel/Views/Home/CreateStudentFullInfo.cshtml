@@ -1,4 +1,4 @@
-﻿@model StudentCrudWithViewModel.Models.Student
+﻿@model StudentCrudWithViewModel.ViewModels.StudentInfoJoinViewModel
 @{
     ViewData["Title"] = "Create Student";
 }
@@ -7,26 +7,29 @@
     <div class="row">
         <div class="col-6 offset-2">
             <div class="card">
-                <div class="card-header">
-                    <h2 class="text-center text-primary">Add Student</h2>
-                </div>
                 <div class="card-body">
-                    <form method="post" asp-action="CreateStudentList">
+                    <form method="post" asp-action="CreateStudentFullInfo">
+                        
                         <div class="form-group">
                             <label asp-for="Name"></label>
-                            <input type="text" asp-for="Name" class="form-control" placeholder="Enter Student Name"/>
+                            <input type="text" asp-for="Name" class="form-control" placeholder="Enter Student Name" />
                         </div>
+                        <br />
+                        
                         <div class="form-group">
                             <label asp-for="Age"></label>
                             <input type="text" asp-for="Age" class="form-control" placeholder="Enter Student Age" />
                         </div>
+                        <br />
+                       
                         <div class="form-group">
                             <label asp-for="Class"></label>
                             <input type="text" asp-for="Class" class="form-control" placeholder="Enter Student Class" />
                         </div>
+                        <br />
                        
                         <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-outline-success float-right"/>
+                            <input type="submit" value="Submit" class="btn btn-outline-success float-right" />
                         </div>
 
 

@@ -2,12 +2,15 @@
 @{
     ViewData["Title"] = "AddressList";
 }
+<div class="text-center fw-bold bg-secondary bg-opacity-25 py-3">
+    <h2 class="text-center">All Address Record</h2>
+</div>
 
 <div class="container">
     <div class="row">
-        <div class="col-10 offset-1">
+        <div class="col-12">
 
-            <table class="table table-bordered text-center">
+            <table class="table table-bordered text-center table-hover table-striped">
                 <thead>
                     <tr>
                         <th>Address Id</th>
@@ -23,6 +26,11 @@
                             <td>@item.AddressId</td>
                             <td>@item.City</td>
                             <td>@item.Region</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" asp-action="" asp-controller="" asp-route-id="">Edit</a>
+                                <a class="btn btn-sm btn-info" asp-action="" asp-controller="" asp-route-id="">Details</a>
+                                <a class="btn btn-sm btn-danger" asp-action="" asp-controller="" asp-route-id="">Delete</a>
+                            </td>
                         </tr>
                     }
 

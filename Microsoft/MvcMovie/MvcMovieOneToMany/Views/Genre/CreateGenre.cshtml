@@ -13,7 +13,9 @@
                 <div class="form-group">
                     <label asp-for="GenreName"></label>
                     <input type="text" asp-for="GenreName" class="form-control" placeholder="Enter Genre Name" />
+                    <span asp-validation-for="GenreName" class="text-danger"></span>
                 </div>
+                
                 <br />
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-success" />

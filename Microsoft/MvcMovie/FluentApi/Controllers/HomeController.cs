@@ -1,8 +1,8 @@
-using DifferentForm.Models;
+using FluentApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace DifferentForm.Controllers
+namespace FluentApi.Controllers
 {
     public class HomeController : Controller
     {
