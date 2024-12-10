@@ -11,8 +11,6 @@ namespace MvcMovieOneToMany.Models
 
         [ Display(Name ="Genre Name")]
         public string? GenreName { get; set; }
-
-        //Navigation Property
         public ICollection<Movie>? Movies { get; set; }
 
     }

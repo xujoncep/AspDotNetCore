@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcMovieOneToMany.Data;
 using MvcMovieOneToMany.Models;
+using MvcMovieOneToMany.Models.ViewModel;
 
 namespace MvcMovieOneToMany.Controllers
 {
@@ -22,67 +23,108 @@ namespace MvcMovieOneToMany.Controllers
             return View(movie);
         }
 
-       
+
         [HttpGet]
         public IActionResult CreateMovie()
         {
-            ViewBag.Genres = new SelectList(_context.Genres, "GenreId", "GenreName");
-            return View();
+            var viewModel = new CreateMovieViewModel
+            {
+                Genres = _context.Genres.Select(g => new SelectListItem
+                {
+                    Value = g.GenreId.ToString(),
+                    Text = g.GenreName
+                })
+            };
+
+            return View(viewModel);
         }
 
-       
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateMovie(Movie movie)
+        public async Task<IActionResult> CreateMovie(CreateMovieViewModel viewModel)
         {
-            ViewBag.Genres = new SelectList(_context.Genres, "GenreId", "GenreName", movie.GenreId);
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var movie = new Movie
+                {
+                    MovieId = Guid.NewGuid(),
+                    Title = viewModel.Title,
+                    GenreId = viewModel.GenreId
+                };
+
                 await _context.AddAsync(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(MovieList));
             }
-           
-            return View(movie);
+
+            viewModel.Genres = _context.Genres.Select(g => new SelectListItem
+            {
+                Value = g.GenreId.ToString(),
+                Text = g.GenreName
+            });
+
+            return View(viewModel);
         }
 
+
+
         [HttpGet]
-        public async Task<IActionResult> EditMovie(Guid? id)
+        public async Task<IActionResult> EditMovie(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var movie= await _context.Movies.FindAsync(id);
+            var movie = await _context.Movies.FindAsync(id);
 
             if (movie == null)
             {
                 return NotFound();
             }
-            ViewBag.Genres = new SelectList(_context.Genres, "GenreId", "GenreName");
-            return View(movie);
 
+            var viewModel = new EditMovieViewModel
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                GenreId = movie.GenreId,
+                Genres = _context.Genres.Select(g => new SelectListItem
+                {
+                    Value = g.GenreId.ToString(),
+                    Text = g.GenreName
+                })
+            };
+
+            return View(viewModel);
         }
+
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMovie(Guid id, Movie movie)
+        public async Task<IActionResult> EditMovie(EditMovieViewModel viewModel)
         {
-            if (id != movie.MovieId)
+            if (ModelState.IsValid)
             {
-                return NotFound();
-            }
+                var movie = await _context.Movies.FindAsync(viewModel.MovieId);
 
-            if (!ModelState.IsValid)
-            {
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                movie.Title = viewModel.Title;
+                movie.GenreId = viewModel.GenreId;
+
                 _context.Update(movie);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(MovieList));
             }
-            ViewBag.Genres = new SelectList(_context.Genres, "GenreId", "GenreName", movie.GenreId);
-            return View(movie);
+
+            viewModel.Genres = _context.Genres.Select(g => new SelectListItem
+            {
+                Value = g.GenreId.ToString(),
+                Text = g.GenreName
+            });
+            
+            return View(viewModel);
 
         }
 
@@ -99,7 +141,7 @@ namespace MvcMovieOneToMany.Controllers
             {
                 return NotFound();
             }
-            //TempData["MovieName"] = movie.Title ;
+            TempData["MovieName"] = movie.Title ;
 
             return View(movie);
         }

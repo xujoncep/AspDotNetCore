@@ -1,4 +1,4 @@
-﻿@model MvcMovieOneToMany.Models.Movie
+﻿@model MvcMovieOneToMany.Models.ViewModel.CreateMovieViewModel
 @{
     ViewData["Title"] = "CreateMovie";
 }
@@ -13,18 +13,22 @@
     <div class="row">
         <div class="col-6 offset-2">
             <form method="post" asp-action="CreateMovie">
+                
                 <div class="form-group">
                     <label asp-for="Title"></label>
                     <input type="text" asp-for="Title" class="form-control" placeholder="Enter Movie Title" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 <br />
+
+
                 <div class="form-group">
                     <label asp-for="GenreId" class="control-label"></label>
-                    <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
+                    <select asp-for="GenreId" class="form-control" asp-items="Model.Genres"></select>
                     <span asp-validation-for="GenreId" class="text-danger"></span>
                 </div>
                 <br />
+
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-success" />
                 </div>

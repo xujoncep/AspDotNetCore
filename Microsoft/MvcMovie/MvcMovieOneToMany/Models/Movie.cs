@@ -14,7 +14,7 @@ namespace MvcMovieOneToMany.Models
         [ForeignKey("GenreId")]
         public Guid GenreId { get; set; }
 
-        public Genre Genre { get; set; } //Navigational property
+        public Genre? Genre { get; set; }
 
     }
 }

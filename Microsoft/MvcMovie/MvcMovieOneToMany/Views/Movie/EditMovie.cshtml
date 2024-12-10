@@ -1,4 +1,4 @@
-﻿@model MvcMovieOneToMany.Models.Movie
+﻿@model MvcMovieOneToMany.Models.ViewModel.EditMovieViewModel
 @{
     ViewData["Title"] = "EditMovie";
 }
@@ -25,7 +25,7 @@
             <br />
             <div class="form-group">
                 <label asp-for="GenreId" class="control-label"></label>
-                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
+                <select asp-for="GenreId" class="form-control" asp-items="Model.Genres"></select>
                 <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>
             <br />
