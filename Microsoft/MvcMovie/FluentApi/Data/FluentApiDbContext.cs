@@ -11,6 +11,8 @@ namespace FluentApi.Data
             
         }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Passport> Passports { get; set; }
         public DbSet<CarCompany> CarCompanies { get; set; }
         public DbSet<CarModel> CarModels { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
@@ -22,6 +24,21 @@ namespace FluentApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //auto key generate off
+            modelBuilder.Entity<User>()
+                .Property(x => x.UserId)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<Passport>()
+                .Property(x => x.PassportId)
+                .ValueGeneratedNever();
+
+            // One to one relation: 
+            modelBuilder.Entity<User>()
+                .HasOne(p => p.Passport)
+                .WithOne(u => u.User)
+                .HasForeignKey<Passport>(p => p.UserId);
+
             // One to one relation: CarCompany(Parent), Carmodel(child)
             modelBuilder.Entity<CarCompany>()
                 .HasOne(a => a.CarModel)

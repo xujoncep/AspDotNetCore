@@ -1,0 +1,58 @@
+﻿@model List<FluentApi.ViewModels.UserListVM>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Welcome to User Section</h1>
+</div>
+
+<p class="align-items-md-start mt-2">
+    <a asp-controller="User" asp-action="CreateUser" class="btn btn-info fw-bold">Add New User</a>
+</p>
+
+
+<div class="container ">
+
+    @if (Model != null)
+    {
+        <table class="table table-bordered table-hover text-center table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2">User Table</th>
+                    <th colspan="2">Passport Table</th>
+                    
+
+                </tr>
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>Passport Number</th>
+                    <th>Passport Id</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.UserId</td>
+                        <td>@item.UserName</td>
+                        <td>@item.PassportNumber</td>
+                        <td>@item.PassportId</td>
+                        <td>
+                            <a asp-action="EditGenre" asp-route-id="@item.UserId" class="btn btn-secondary">Update</a>
+                            <a asp-action="DeleteGenre" asp-route-id="@item.UserId" class="btn btn-danger">Delete</a>
+
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

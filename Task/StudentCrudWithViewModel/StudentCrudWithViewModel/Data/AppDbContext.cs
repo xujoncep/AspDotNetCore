@@ -14,5 +14,17 @@ namespace StudentCrudWithViewModel.Data
         }
         public DbSet<Student> Students { get; set; }
         public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Passport> Passports { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasOne(p => p.Passport)
+                .WithOne(u => u.User)
+                .HasForeignKey<Passport>(p => p.UserId);
+        }
     }
 }

@@ -5,7 +5,7 @@
 namespace FluentApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,6 +60,18 @@ namespace FluentApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subjects", x => x.SubjectId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,10 +135,35 @@ namespace FluentApi.Migrations
                         principalColumn: "SubjectId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Passports",
+                columns: table => new
+                {
+                    PassportId = table.Column<int>(type: "int", nullable: false),
+                    PassportNumber = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Passports", x => x.PassportId);
+                    table.ForeignKey(
+                        name: "FK_Passports_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CarModels_CarCompanyId",
                 table: "CarModels",
                 column: "CarCompanyId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Passports_UserId",
+                table: "Passports",
+                column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -147,6 +184,9 @@ namespace FluentApi.Migrations
                 name: "CarModels");
 
             migrationBuilder.DropTable(
+                name: "Passports");
+
+            migrationBuilder.DropTable(
                 name: "Patients");
 
             migrationBuilder.DropTable(
@@ -154,6 +194,9 @@ namespace FluentApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "CarCompanies");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Doctors");

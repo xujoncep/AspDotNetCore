@@ -75,6 +75,25 @@ namespace FluentApi.Migrations
                     b.ToTable("Doctors");
                 });
 
+            modelBuilder.Entity("FluentApi.Models.Passport", b =>
+                {
+                    b.Property<int>("PassportId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PassportNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PassportId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Passports");
+                });
+
             modelBuilder.Entity("FluentApi.Models.Patient", b =>
                 {
                     b.Property<int>("PatientId")
@@ -143,6 +162,20 @@ namespace FluentApi.Migrations
                     b.ToTable("Subjects");
                 });
 
+            modelBuilder.Entity("FluentApi.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("FluentApi.Models.CarModel", b =>
                 {
                     b.HasOne("FluentApi.Models.CarCompany", "CarCompany")
@@ -152,6 +185,17 @@ namespace FluentApi.Migrations
                         .IsRequired();
 
                     b.Navigation("CarCompany");
+                });
+
+            modelBuilder.Entity("FluentApi.Models.Passport", b =>
+                {
+                    b.HasOne("FluentApi.Models.User", "User")
+                        .WithOne("Passport")
+                        .HasForeignKey("FluentApi.Models.Passport", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FluentApi.Models.Patient", b =>
@@ -202,6 +246,11 @@ namespace FluentApi.Migrations
             modelBuilder.Entity("FluentApi.Models.Subject", b =>
                 {
                     b.Navigation("StudentSubject");
+                });
+
+            modelBuilder.Entity("FluentApi.Models.User", b =>
+                {
+                    b.Navigation("Passport");
                 });
 #pragma warning restore 612, 618
         }
