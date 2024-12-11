@@ -19,8 +19,10 @@ namespace MvcMovieOneToMany.Data
             modelBuilder.Entity<Genre>()
                 .HasMany(m => m.Movies)
                 .WithOne(g => g.Genre)
-                .HasForeignKey(g => g.GenreId);
-            base.OnModelCreating(modelBuilder);
+                .HasForeignKey(g => g.GenreId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+            
         }
 
     }

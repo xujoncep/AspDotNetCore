@@ -9,6 +9,7 @@ namespace MvcMovieOneToMany.Models
         [Key]
         public Guid GenreId { get; set; }
 
+        [Required]
         [ Display(Name ="Genre Name")]
         public string? GenreName { get; set; }
         

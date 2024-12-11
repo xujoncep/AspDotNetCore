@@ -26,7 +26,8 @@
                 <tr>
                     <td>@item.MovieId</td>
                     <td>@item.Title</td>
-                    <td>@item.Genre.GenreName</td>
+                     @*  <td>@item.Genre.GenreName</td> *@
+                    <td>@(item.Genre != null ? item.Genre.GenreName : "No Genre")</td>
                     <td>
                         <a asp-action="EditMovie" asp-route-id="@item.MovieId" class="btn btn-secondary">Update</a>
                         <a asp-action="DeleteMovie" asp-route-id="@item.MovieId" class="btn btn-danger">Delete</a>

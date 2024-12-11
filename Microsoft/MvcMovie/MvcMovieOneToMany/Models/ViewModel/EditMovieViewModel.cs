@@ -11,7 +11,7 @@ namespace MvcMovieOneToMany.Models.ViewModel
         public string Title { get; set; }
 
         [Required]
-        public Guid GenreId { get; set; }
+        public Guid? GenreId { get; set; }
 
         public IEnumerable<SelectListItem>? Genres { get; set; }
 

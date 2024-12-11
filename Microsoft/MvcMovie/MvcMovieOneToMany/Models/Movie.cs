@@ -12,7 +12,7 @@ namespace MvcMovieOneToMany.Models
 
 
         [ForeignKey("GenreId")]
-        public Guid GenreId { get; set; }
+        public Guid? GenreId { get; set; }
 
         public Genre? Genre { get; set; }
 
