@@ -2,6 +2,7 @@
 using FluentApi.Models;
 using FluentApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FluentApi.Controllers
 {
@@ -66,6 +67,30 @@ namespace FluentApi.Controllers
              
             }
             return View(viewModel);
+        }
+
+        
+        
+        
+        
+        
+        //duplicate id check in database
+        [AcceptVerbs("Post","Get")]
+        public async Task<IActionResult> IsIdTaken(string UserName)
+        {
+            var data = await _context.Users.Where(d => d.UserName == UserName).FirstOrDefaultAsync();
+
+            if (data == null)
+            {
+                return Json($"UserId {UserName} already taken!");
+            }
+
+            else
+            {
+                return Json(true);
+            }
+
+
         }
 
     }
