@@ -1,0 +1,47 @@
+﻿@model FluentApi.ViewModels.EditUserVM
+@{
+    ViewData["Title"] = "EditUser";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Welcome to Edit User Section</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditUser">
+
+            <div class="form-group">
+                <label asp-for="UserId" class="form-label"></label>
+                <input asp-for="UserId" class="form-control" readonly />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="PassportId" class="form-label"></label>
+                <input asp-for="PassportId" class="form-control" readonly />
+                <span asp-validation-for="PassportId" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="PassportNumber" class="form-label"></label>
+                <input asp-for="PassportNumber" class="form-control" />
+                <span asp-validation-for="PassportNumber" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>

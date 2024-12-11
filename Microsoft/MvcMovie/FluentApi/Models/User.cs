@@ -10,6 +10,7 @@ namespace FluentApi.Models
 
         public string? UserName { get; set; }
 
-        public Passport? Passport { get; set; }
+        [Required]
+        public Passport Passport { get; set; }
     }
 }
