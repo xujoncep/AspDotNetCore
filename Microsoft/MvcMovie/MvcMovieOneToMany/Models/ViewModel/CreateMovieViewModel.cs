@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace MvcMovieOneToMany.Models.ViewModel
@@ -8,6 +9,7 @@ namespace MvcMovieOneToMany.Models.ViewModel
         public Guid MovieId { get; set; }
 
         [Required]
+        [Remote(action: "IsMovieExists", controller:"Movie")]
         public string Title { get; set; }
 
         [Required]

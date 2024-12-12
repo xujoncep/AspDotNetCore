@@ -84,9 +84,7 @@ namespace FluentApi.Controllers
             var viewModel = new EditUserVM
             {
                UserId=user.UserId,
-               UserName=user.UserName,
-               PassportId= user.Passport.PassportId,
-               PassportNumber = user.Passport.PassportNumber,    
+               UserName=user.UserName    
             };
 
             return View(viewModel);
@@ -96,7 +94,7 @@ namespace FluentApi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditMovie(EditUserVM viewModel)
+        public async Task<IActionResult> EditUser(EditUserVM viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -107,7 +105,7 @@ namespace FluentApi.Controllers
                     return NotFound();
                 }
                 item.UserName = viewModel.UserName;
-                item.Passport.PassportNumber= viewModel.PassportNumber;
+                //item.Passport.PassportNumber= viewModel.PassportNumber;
 
                 _context.Update(item);
                 await _context.SaveChangesAsync();

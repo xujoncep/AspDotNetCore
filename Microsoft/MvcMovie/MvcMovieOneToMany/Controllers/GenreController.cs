@@ -37,6 +37,7 @@ namespace MvcMovieOneToMany.Controllers
             {
                 _dbcontext.Genres.Add(genre);
                 await _dbcontext.SaveChangesAsync();
+                TempData["SuccessMessage"] = " Genre Successfully Created!";
                 return RedirectToAction(nameof(GenreList));
 
             }
@@ -74,6 +75,7 @@ namespace MvcMovieOneToMany.Controllers
             {
                 _dbcontext.Update(genre);
                 await _dbcontext.SaveChangesAsync();
+                TempData["UpdateMessage"] = " Genre Successfully Updated!";
                 return RedirectToAction(nameof(GenreList));
             }
             return View(genre);
@@ -113,7 +115,7 @@ namespace MvcMovieOneToMany.Controllers
                 _dbcontext.Genres.Remove(genre);
             }
             await _dbcontext.SaveChangesAsync();
-
+            TempData["DeleteMessage"] = " Genre Successfully Deleted!";
             return RedirectToAction(nameof(GenreList));
         }
 

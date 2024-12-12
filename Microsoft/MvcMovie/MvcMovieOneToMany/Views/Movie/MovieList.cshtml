@@ -3,6 +3,26 @@
     ViewData["Title"] = "MovieList";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class=" alert alert-success fw-bold">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["UpdateMessage"] != null)
+{
+    <div class=" alert alert-warning fw-bold">
+        @TempData["UpdateMessage"]
+    </div>
+}
+@if (TempData["DeleteMessage"] != null)
+{
+    <div class=" alert alert-danger fw-bold">
+        @TempData["DeleteMessage"]
+    </div>
+}
+
 <div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
     <h1>Welcome to MovieList Section</h1>
 </div>

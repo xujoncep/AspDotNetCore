@@ -52,9 +52,9 @@ namespace MvcMovieOneToMany.Controllers
                     Title = viewModel.Title,
                     GenreId = viewModel.GenreId
                 };
-
                 await _context.AddAsync(movie);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Movie successfully created!";
                 return RedirectToAction(nameof(MovieList));
             }
 
@@ -114,7 +114,7 @@ namespace MvcMovieOneToMany.Controllers
 
                 _context.Update(movie);
                 await _context.SaveChangesAsync();
-
+                TempData["UpdateMessage"] = "Movie successfully Updated!";
                 return RedirectToAction(nameof(MovieList));
             }
 
@@ -161,8 +161,30 @@ namespace MvcMovieOneToMany.Controllers
                 _context.Movies.Remove(movie);
             }
             await _context.SaveChangesAsync();
-
+            TempData["DeleteMessage"] = "Movie successfully Deleted!";
             return RedirectToAction(nameof(MovieList));
+        }
+
+       
+        //Remote Validation section is here
+
+        
+        [AcceptVerbs("Post", "Get")]
+        public async Task<IActionResult> IsMovieExists(string title)
+        {
+            var data = await _context.Movies.Where(d => d.Title == title).FirstOrDefaultAsync();
+
+            if (data != null)
+            {
+                return Json($"Movie {title} already in Website!");
+            }
+
+            else
+            {
+                return Json(true);
+            }
+
+
         }
     }
 }
