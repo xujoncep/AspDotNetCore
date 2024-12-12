@@ -1,4 +1,5 @@
 ﻿using FluentApi.Models;
+using FluentApi.Models.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FluentApi.Data
@@ -13,41 +14,37 @@ namespace FluentApi.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Passport> Passports { get; set; }
-        public DbSet<CarCompany> CarCompanies { get; set; }
-        public DbSet<CarModel> CarModels { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Address> Addresss { get; set; }
         public DbSet<StudentSubject> StudentSubject { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //auto key generate off
+            //modelBuilder.Entity<User>()
+            //    .Property(x => x.UserId)
+            //    .ValueGeneratedNever();
+
+            //modelBuilder.Entity<Passport>()
+            //    .Property(x => x.PassportId)
+            //    .ValueGeneratedNever();
+
+            // User to Passport (One-to-One)
             modelBuilder.Entity<User>()
-                .Property(x => x.UserId)
-                .ValueGeneratedNever();
+                .HasOne(u => u.Passport)
+                .WithOne(p => p.User)
+                .HasForeignKey<User>(u => u.PassportId); // FK in User table
 
-            modelBuilder.Entity<Passport>()
-                .Property(x => x.PassportId)
-                .ValueGeneratedNever();
-
-            // One to one relation: 
+            // User to Address (One-to-One)
             modelBuilder.Entity<User>()
-                .HasOne(p => p.Passport)
-                .WithOne(u => u.User)
-                .HasForeignKey<Passport>(p => p.UserId);
+                .HasOne(u => u.Address)
+                .WithOne(a => a.User)
+                .HasForeignKey<User>(u => u.AddressId); // FK in User table
 
-            // One to one relation: CarCompany(Parent), Carmodel(child)
-            modelBuilder.Entity<CarCompany>()
-                .HasOne(a => a.CarModel)
-                .WithOne(b => b.CarCompany)
-                .HasForeignKey<CarModel>( k => k.CarCompanyId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-            
-           
             // One To Many relation: Doctor(parient), Patient(Child)
 
             modelBuilder.Entity<Doctor>()

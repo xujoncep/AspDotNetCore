@@ -16,6 +16,7 @@ namespace MvcMovieOneToMany.Controllers
             _context = context;
             
         }
+        [HttpGet]
         public async Task<IActionResult> MovieList()
         {
             var movie = await _context.Movies.Include(m => m.Genre).ToListAsync();

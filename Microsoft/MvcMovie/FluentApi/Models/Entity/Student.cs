@@ -1,4 +1,4 @@
-﻿namespace FluentApi.Models
+﻿namespace FluentApi.Models.Entity
 {
     public class Student
     {

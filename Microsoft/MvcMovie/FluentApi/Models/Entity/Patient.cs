@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FluentApi.Models
+namespace FluentApi.Models.Entity
 {
     public class Patient
     {
@@ -11,7 +11,7 @@ namespace FluentApi.Models
 
         [ForeignKey("DoctorId")]
         public int DoctorId { get; set; }
-        public Doctor? Doctor { get; set; } 
+        public Doctor? Doctor { get; set; }
 
 
     }

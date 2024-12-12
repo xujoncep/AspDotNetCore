@@ -16,26 +16,15 @@ namespace FluentApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var info =  ( from user in _context.Users
-                         join passport in _context.Passports
-                         on user.UserId equals passport.UserId
-                         select new UserListVM
-                         {
-                             UserId = user.UserId,
-                             UserName = user.UserName,
-                             PassportId = passport.PassportId,
-                             PassportNumber = passport.PassportNumber,
-                             
-                         }).ToList();
-            
+            var info = await _context.Users.Include(a => a.Address).Include(p => p.Passport).ToListAsync();
+
             return View(info);
         }
 
-       
-        [HttpGet]
 
+        [HttpGet]
         public IActionResult CreateUser()
         {
             return View();    
@@ -43,27 +32,58 @@ namespace FluentApi.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserVM viewModel)
+        public async Task<IActionResult> CreateUser(CreateRecordVM viewModel)
         {
             
             if (ModelState.IsValid)
             {
-                var user = new User
-                {
-                    UserId = viewModel.UserId,
-                    UserName = viewModel.UserName,
-                };
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
+               
+                //var id = Guid.NewGuid();
 
                 var passport = new Passport
-                { 
-                    PassportId = viewModel.PassportId,
-                    UserId = viewModel.UserId,
-                    PassportNumber= viewModel.PassportNumber,               
+                {
+                    //UserId = id,
+                    PassportNumber = viewModel.PassportNumber,
+                    IsValid = viewModel.IsValid,
                 };
                 await _context.Passports.AddAsync(passport);
                 await _context.SaveChangesAsync();
+
+                var address = new Address
+                {
+                    //UserId=id,
+                    CityName = viewModel.CityName,
+                    SectionName = viewModel.SectionName,
+                    RoadNumber = viewModel.RoadNumber,
+                    ZipCode = viewModel.ZipCode,
+                };
+
+                await _context.Addresss.AddAsync(address);
+                await _context.SaveChangesAsync();
+
+
+                var user = new User
+                {
+                    //UserId= id,
+                    UserName = viewModel.UserName,
+                    Birthdate = viewModel.Birthdate,
+                    PassportId =passport.PassportId,
+                    AddressId = address.AddressId,
+                    
+                    //PassportId = _context.Passports
+                    //    .Where(p => p.UserId == id)
+                    //    .Select(p => p.PassportId)
+                    //    .FirstOrDefault(),
+                    
+                    //AddressId = _context.Addresss
+                    //    .Where(a => a.UserId == id)
+                    //    .Select(a => a.AddressId)
+                    //    .FirstOrDefault(),
+                };
+
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
              
             }
@@ -83,8 +103,9 @@ namespace FluentApi.Controllers
 
             var viewModel = new EditUserVM
             {
-               UserId=user.UserId,
-               UserName=user.UserName    
+               UserName=user.UserName,
+               PassportId = user.PassportId,
+               //PassportNumber = user.Passport.PassportNumber,
             };
 
             return View(viewModel);
@@ -119,7 +140,7 @@ namespace FluentApi.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> DeleteUser(int? id)
+        public async Task<IActionResult> DeleteUser(Guid? id)
         {
             if (id == null)
             {
@@ -160,7 +181,7 @@ namespace FluentApi.Controllers
 
         //duplicate id check in database
         [AcceptVerbs("Post","Get")]
-        public async Task<IActionResult> IsIdTaken(string UserName)
+        public async Task<IActionResult> IsUserNameExists(string UserName)
         {
             var data = await _context.Users.Where(d => d.UserName == UserName).FirstOrDefaultAsync();
 

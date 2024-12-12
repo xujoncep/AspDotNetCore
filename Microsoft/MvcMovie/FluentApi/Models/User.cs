@@ -5,12 +5,29 @@ namespace FluentApi.Models
 {
     public class User
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int UserId { get; set; }
+        [Key]
+        public Guid UserId { get; set; }
 
+        [Required]
         public string? UserName { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        public DateTime? Birthdate { get; set; }
+
+       //Passport section
+
+        [ForeignKey("PassportId")]
+        public int PassportId { get; set; }
         public Passport Passport { get; set; }
+
+        //Address section
+
+        [ForeignKey("AddressId")]
+        public int AddressId { get; set; }
+
+        public Address Address { get; set; }
+
+
     }
 }

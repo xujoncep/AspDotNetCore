@@ -1,6 +1,6 @@
-﻿@model FluentApi.ViewModels.CreateUserVM
+﻿@model FluentApi.ViewModels.CreateRecordVM
 @{
-    ViewData["Title"] = "Create Student";
+    ViewData["Title"] = "CreateUser";
 }
 
 <div class="container">
@@ -11,12 +11,6 @@
                     <form method="post" asp-action="CreateUser">
 
                         <div class="form-group">
-                            <label asp-for="UserId"></label>
-                            <input type="text" asp-for="UserId" class="form-control" placeholder="Enter UserID" />
-                            <span asp-validation-for="UserId" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
                             <label asp-for="UserName"></label>
                             <input type="text" asp-for="UserName" class="form-control" placeholder="Enter UserName" />
                             <span asp-validation-for="UserName" class="text-danger"></span>
@@ -24,19 +18,55 @@
                         <br />
 
                         <div class="form-group">
-                            <label asp-for="PassportId"></label>
-                            <input type="text" asp-for="PassportId" class="form-control" placeholder="Enter PassportId" />
-                            <span asp-validation-for="PassportId" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="PassportNumber"></label>
-                            <input type="text" asp-for="PassportNumber" class="form-control" placeholder="Enter Passport Number" />
+                            <label asp-for="Birthdate"></label>
+                            <input type="datetime" asp-for="Birthdate" class="form-control" placeholder="Enter Birthdate" />
+                            <span asp-validation-for="Birthdate" class="text-danger"></span>
                         </div>
                         <br />
 
                         <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-outline-success float-right" />
+                            <label asp-for="PassportNumber"></label>
+                            <input type="text" asp-for="PassportNumber" class="form-control" placeholder="Enter Passport Number" />
+                            <span asp-validation-for="PassportNumber" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="IsValid"></label>
+                            <input type="text" asp-for="IsValid" class="form-control" placeholder="Enter Validity" />
+                        </div>
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="CityName"></label>
+                            <input type="text" asp-for="CityName" class="form-control" placeholder="Enter City" />
+                            <span asp-validation-for="CityName" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="SectionName"></label>
+                            <input type="text" asp-for="SectionName" class="form-control" placeholder="Enter Section Name" />
+                            <span asp-validation-for="SectionName" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="RoadNumber"></label>
+                            <input type="text" asp-for="RoadNumber" class="form-control" placeholder="Enter Road Number" />
+                            <span asp-validation-for="RoadNumber" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="ZipCode"></label>
+                            <input type="text" asp-for="ZipCode" class="form-control" placeholder="Enter ZipCode" />
+                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        <div class="form-group">
+                            <input type="submit" value="Submit" class="btn btn-success float-right" />
                         </div>
 
                     </form>

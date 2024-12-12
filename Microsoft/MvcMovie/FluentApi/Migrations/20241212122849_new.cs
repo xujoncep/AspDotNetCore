@@ -1,26 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace FluentApi.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CarCompanies",
+                name: "Addresss",
                 columns: table => new
                 {
-                    CarCompanyId = table.Column<int>(type: "int", nullable: false)
+                    AddressId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CityName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoadNumber = table.Column<int>(type: "int", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarCompanies", x => x.CarCompanyId);
+                    table.PrimaryKey("PK_Addresss", x => x.AddressId);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,6 +38,20 @@ namespace FluentApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Doctors", x => x.DoctorId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Passports",
+                columns: table => new
+                {
+                    PassportId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PassportNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsValid = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Passports", x => x.PassportId);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,38 +81,6 @@ namespace FluentApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CarModels",
-                columns: table => new
-                {
-                    CarModelId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CarCompanyId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CarModels", x => x.CarModelId);
-                    table.ForeignKey(
-                        name: "FK_CarModels_CarCompanies_CarCompanyId",
-                        column: x => x.CarCompanyId,
-                        principalTable: "CarCompanies",
-                        principalColumn: "CarCompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
@@ -111,6 +97,33 @@ namespace FluentApi.Migrations
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "DoctorId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PassportId = table.Column<int>(type: "int", nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Users_Addresss_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresss",
+                        principalColumn: "AddressId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_Passports_PassportId",
+                        column: x => x.PassportId,
+                        principalTable: "Passports",
+                        principalColumn: "PassportId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,37 +148,6 @@ namespace FluentApi.Migrations
                         principalColumn: "SubjectId");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Passports",
-                columns: table => new
-                {
-                    PassportId = table.Column<int>(type: "int", nullable: false),
-                    PassportNumber = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Passports", x => x.PassportId);
-                    table.ForeignKey(
-                        name: "FK_Passports_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CarModels_CarCompanyId",
-                table: "CarModels",
-                column: "CarCompanyId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Passports_UserId",
-                table: "Passports",
-                column: "UserId",
-                unique: true);
-
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_DoctorId",
                 table: "Patients",
@@ -175,25 +157,28 @@ namespace FluentApi.Migrations
                 name: "IX_StudentSubject_SubjectId",
                 table: "StudentSubject",
                 column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AddressId",
+                table: "Users",
+                column: "AddressId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PassportId",
+                table: "Users",
+                column: "PassportId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CarModels");
-
-            migrationBuilder.DropTable(
-                name: "Passports");
-
-            migrationBuilder.DropTable(
                 name: "Patients");
 
             migrationBuilder.DropTable(
                 name: "StudentSubject");
-
-            migrationBuilder.DropTable(
-                name: "CarCompanies");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -206,6 +191,12 @@ namespace FluentApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "Addresss");
+
+            migrationBuilder.DropTable(
+                name: "Passports");
         }
     }
 }

@@ -6,11 +6,9 @@ namespace FluentApi.ViewModels
     public class EditUserVM
     {
         public int UserId { get; set; }
-
-        //[Remote(action: "IsIdTaken", controller: "User")]
         [Required]
         public string? UserName { get; set; }
         public int PassportId { get; set; }
-        public int PassportNumber { get; set; }
+        public string PassportNumber { get; set; }
     }
 }
