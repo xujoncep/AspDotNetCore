@@ -12,7 +12,6 @@ namespace MvcMovieOneToMany.Data
         }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<MovieDetails> MoviesDetails { get; set; }
 
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)

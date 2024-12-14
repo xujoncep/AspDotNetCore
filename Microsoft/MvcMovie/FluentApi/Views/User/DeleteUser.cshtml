@@ -1,4 +1,4 @@
-﻿@model FluentApi.Models.User
+﻿@model FluentApi.ViewModels.DeleteUserVM
 @{
     ViewData["Title"] = "DeleteUser";
 }
@@ -8,8 +8,16 @@
 </div>
 
 <div class="fw-bold text-center text-danger py-3">
-    <h2>User Name: @TempData["UserName"]</h2>
+    <div class="card">
     <h2>Are you sure to delete this User?</h2>
+        <div class="card-body">
+            <h5 class="card-title">User Details</h5>
+            <p><strong>User Name:</strong> @Model.UserName</p>
+            <p><strong>Passport Number:</strong> @Model.PassportNumber</p>
+            <p><strong>City Name:</strong> @Model.CityName</p>
+            <p><strong>Road Number:</strong> @Model.RoadNumber</p>
+        </div>
+    </div>
 </div>
 
 

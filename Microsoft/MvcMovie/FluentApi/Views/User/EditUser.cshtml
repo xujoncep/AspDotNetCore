@@ -3,30 +3,28 @@
     ViewData["Title"] = "EditUser";
 }
 
-<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
-    <h1>Welcome to Edit User Section</h1>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="row fw-bold">
+    <div class="col-6 offset-2">
         <form asp-action="EditUser">
 
             <div class="form-group">
                 <label asp-for="UserId" class="form-label"></label>
-                <input asp-for="UserId" class="form-control" readonly />
+                <input asp-for="UserId" class="form-control text-danger" readonly />
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <br />
+
             <div class="form-group">
                 <label asp-for="UserName" class="form-label"></label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <br />
+
             <div class="form-group">
-                <label asp-for="PassportId" class="form-label"></label>
-                <input asp-for="PassportId" class="form-control" readonly />
-                <span asp-validation-for="PassportId" class="text-danger"></span>
+                <label asp-for="Birthdate" class="form-label"></label>
+                <input asp-for="Birthdate" class="form-control" />
+                <span asp-validation-for="Birthdate" class="text-danger"></span>
             </div>
             <br />
 
@@ -36,6 +34,42 @@
                 <span asp-validation-for="PassportNumber" class="text-danger"></span>
             </div>
             <br />
+
+            <div class="form-group">
+                <label asp-for="IsValid" class="form-label"></label>
+                <input asp-for="IsValid" class="form-control" />
+                <span asp-validation-for="IsValid" class="text-danger"></span>
+            </div>
+            <br />
+
+             <div class="form-group">
+                <label asp-for="CityName" class="form-label"></label>
+                <input asp-for="CityName" class="form-control" />
+                <span asp-validation-for="CityName" class="text-danger"></span>
+            </div>
+            <br />
+
+             <div class="form-group">
+                <label asp-for="SectionName" class="form-label"></label>
+                <input asp-for="SectionName" class="form-control" />
+                <span asp-validation-for="SectionName" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="RoadNumber" class="form-label"></label>
+                <input asp-for="RoadNumber" class="form-control" />
+                <span asp-validation-for="RoadNumber" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="ZipCode" class="form-label"></label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+            <br />
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-primary">Back to List</a>

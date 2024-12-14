@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MvcMovieOneToMany.Data;
 using MvcMovieOneToMany.Models;
+using MvcMovieOneToMany.Models.ViewModel;
 
 namespace MvcMovieOneToMany.Controllers
 {
@@ -31,17 +32,21 @@ namespace MvcMovieOneToMany.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateGenre(Genre genre)
+        public async Task<IActionResult> CreateGenre(CreateGenreViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                var genre = new Genre
+                {
+                    GenreName = viewModel.GenreName,
+                };
                 _dbcontext.Genres.Add(genre);
                 await _dbcontext.SaveChangesAsync();
                 TempData["SuccessMessage"] = " Genre Successfully Created!";
                 return RedirectToAction(nameof(GenreList));
 
             }
-            return View(genre);
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -117,6 +122,25 @@ namespace MvcMovieOneToMany.Controllers
             await _dbcontext.SaveChangesAsync();
             TempData["DeleteMessage"] = " Genre Successfully Deleted!";
             return RedirectToAction(nameof(GenreList));
+        }
+
+       
+        [AcceptVerbs("Post", "Get")]
+        public async Task<IActionResult> IsGenreExists(string GenreName)
+        {
+            var data = await _dbcontext.Genres.Where(g => g.GenreName==GenreName).FirstOrDefaultAsync();
+
+            if (data != null)
+            {
+                return Json($"Genre {GenreName} already Exists!");
+            }
+
+            else
+            {
+                return Json(true);
+            }
+
+
         }
 
     }

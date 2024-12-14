@@ -92,9 +92,9 @@ namespace FluentApi.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> EditUser(int id)
+        public async Task<IActionResult> EditUser(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(a => a.Address).Include(p => p.Passport).FirstOrDefaultAsync(u =>u.UserId==id);
 
             if (user == null)
             {
@@ -103,9 +103,15 @@ namespace FluentApi.Controllers
 
             var viewModel = new EditUserVM
             {
+               UserId = user.UserId,
                UserName=user.UserName,
-               PassportId = user.PassportId,
-               //PassportNumber = user.Passport.PassportNumber,
+               Birthdate=user.Birthdate,
+               PassportNumber =user.Passport.PassportNumber,
+               IsValid =user.Passport.IsValid,
+               CityName =user.Address.CityName,
+               SectionName =user.Address.SectionName,
+               RoadNumber =user.Address.RoadNumber,
+               ZipCode =user.Address.ZipCode,
             };
 
             return View(viewModel);
@@ -119,16 +125,24 @@ namespace FluentApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var item = await _context.Users.FindAsync(viewModel.UserId);
+                var user = await _context.Users.Include(a => a.Address)
+                                               .Include(p => p.Passport)
+                                               .FirstOrDefaultAsync(u => u.UserId == viewModel.UserId);
 
-                if (item == null)
+                if (user == null)
                 {
                     return NotFound();
                 }
-                item.UserName = viewModel.UserName;
-                //item.Passport.PassportNumber= viewModel.PassportNumber;
-
-                _context.Update(item);
+                user.UserName = viewModel.UserName;
+                user.Birthdate = viewModel.Birthdate;
+                user.Passport.PassportNumber = viewModel.PassportNumber;
+                user.Passport.IsValid = viewModel.IsValid;
+                user.Address.CityName = viewModel.CityName;
+                user.Address.SectionName = viewModel.SectionName;
+                user.Address.RoadNumber = viewModel.RoadNumber;
+                user.Address.ZipCode = viewModel.ZipCode;
+                
+                _context.Update(user);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -140,22 +154,59 @@ namespace FluentApi.Controllers
 
 
         [HttpGet]
+
+        public async Task<IActionResult> DetailsUser(Guid? id)
+        {
+            if (id == null )
+            {
+                return NotFound();
+            }
+            var user = await _context.Users.Include(a => a.Address).Include(p => p.Passport).FirstOrDefaultAsync(u => u.UserId == id);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new UserDetailsVM
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                Birthdate = user.Birthdate,
+                PassportNumber = user.Passport.PassportNumber,
+                IsValid = user.Passport.IsValid,
+                CityName = user.Address.CityName,
+                SectionName = user.Address.SectionName,
+                RoadNumber = user.Address.RoadNumber,
+                ZipCode = user.Address.ZipCode,
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> DeleteUser(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == id);
+            var user = await _context.Users.Include(a => a.Address).Include(p => p.Passport).FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            TempData["UserName"] = user.UserName;
-
-            return View(user);
+            var data = new DeleteUserVM
+            { 
+                UserId = user.UserId,
+                UserName = user.UserName,
+                PassportNumber = user.Passport.PassportNumber,
+                CityName = user.Address.CityName,
+                RoadNumber = user.Address.RoadNumber,               
+            };
+            return View(data);
         }
 
 
@@ -163,7 +214,7 @@ namespace FluentApi.Controllers
         [ActionName("DeleteUser")]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeleteUserConfirm(int id)
+        public async Task<IActionResult> DeleteUserConfirm(Guid id)
         {
             var u = await _context.Users.FindAsync(id);
            
@@ -188,6 +239,25 @@ namespace FluentApi.Controllers
             if (data != null)
             {
                 return Json($"UserId {UserName} already taken!");
+            }
+
+            else
+            {
+                return Json(true);
+            }
+
+
+        }
+
+        //duplicate id check in database
+        [AcceptVerbs("Post", "Get")]
+        public async Task<IActionResult> IsPassportExists(string PassportNumber)
+        {
+            var data = await _context.Users.Include(p => p.Passport).Where(d => d.Passport.PassportNumber == PassportNumber).FirstOrDefaultAsync();
+
+            if (data != null)
+            {
+                return Json($"UserId {PassportNumber} already taken!");
             }
 
             else

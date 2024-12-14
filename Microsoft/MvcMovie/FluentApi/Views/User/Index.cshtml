@@ -18,27 +18,18 @@
     {
         <table class="table table-bordered table-hover text-center table-striped">
             <thead>
-                <tr>
+                @* <tr>
                     <th colspan="3">User Table</th>
                     <th colspan="3">Passport Table</th>
-                    <th colspan="5">Address Table</th>
-                    
-
-                </tr>
+                    <th colspan="5">Address Table</th>                  
+                </tr> *@
                 <tr>
-                    <th>U-Id</th>
-                    <th>U-Name</th>
-                    <th>U-BirthDate</th>
-                    <th>P-Id</th>
-                    <th>P-Number</th>
-                    <th>P-IsValid</th>
-                    <th>A-Id</th>
-                    <td>A-City</td>
-                    <td>A-Section</td>
-                    <td>A-Road</td>
-                    <td>A-Zip</td>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>Passport Number</th>
+                    <th>City</th>
+                    <th>Zip Code</th>
                     <th>Action</th>
-
                 </tr>
             </thead>
 
@@ -49,28 +40,19 @@
                     <tr>
                         <td>@item.UserId</td>
                         <td>@item.UserName</td>
-                        <td>@item.Birthdate</td>
-                        <td>@item.PassportId</td>
 
                          <td>@(item.Passport != null ? item.Passport.PassportNumber : "No Passport" )</td>
-                         <td>@(item.Passport != null ? item.Passport.IsValid : "None")</td>
-                         <td>@item.AddressId</td>
+
+
                          <td>@(item.Address != null ? item.Address.CityName : "None" )</td>
-                         <td>@(item.Address != null ? item.Address.SectionName : "None")</td>
-                         <td>@(item.Address != null ? item.Address.RoadNumber: "None")</td>
+                        
+                       
                          <td>@(item.Address != null ? item.Address.ZipCode : "None")</td>
 
-                        @* <td>@(item.Passport.PassportNumber)</td>
-                        <td>@(item.Passport.IsValid)</td>
-                        <td>@item.AddressId</td>
-                        <td>@(item.Address.CityName)</td>
-                        <td>@(item.Address.SectionName)</td>
-                        <td>@(item.Address.RoadNumber)</td>
-                        <td>@(item.Address.ZipCode)</td> *@
                         <td>
                             <a asp-action="EditUser" asp-route-id="@item.UserId" class="btn btn-secondary">Update</a>
                             <a asp-action="DeleteUser" asp-route-id="@item.UserId" class="btn btn-danger">Delete</a>
-
+                            <a asp-action="DetailsUser" asp-route-id="@item.UserId" class="btn btn-info">Details</a>
                         </td>
                     </tr>
 

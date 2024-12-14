@@ -1,0 +1,66 @@
+﻿
+@model FluentApi.ViewModels.UserDetailsVM
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary opacity-50 text-white ">
+            <h2 class="mb-0">User Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <h5><strong>Name:</strong></h5>
+                    <p>@Model.UserName</p>
+                </div>
+                <div class="col-md-6">
+                    <h5><strong>Birthdate:</strong></h5>
+                    <p>@Model.Birthdate</p>
+                </div>
+            </div>
+
+            <h4 class="mt-4">Passport Information</h4>
+            <hr />
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <h5><strong>Passport Number:</strong></h5>
+                    <p>@Model.PassportNumber</p>
+                </div>
+                <div class="col-md-6">
+                    <h5><strong>Is Valid:</strong></h5>
+                    <p>@Model.IsValid</p>
+                </div>
+            </div>
+
+            <h4 class="mt-4">Address Details</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><strong>City Name:</strong></h5>
+                    <p>@Model.CityName</p>
+                </div>
+                <div class="col-md-6">
+                    <h5><strong>Section Name:</strong></h5>
+                    <p>@Model.SectionName</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><strong>Road Number:</strong></h5>
+                    <p>@Model.RoadNumber</p>
+                </div>
+                <div class="col-md-6">
+                    <h5><strong>Zip Code:</strong></h5>
+                    <p>@Model.ZipCode</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a asp-action="EditUser" asp-route-id="@Model.UserId" class="btn btn-warning me-2">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

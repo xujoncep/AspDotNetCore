@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MvcMovieOneToMany.Models.ViewModel
@@ -13,6 +14,7 @@ namespace MvcMovieOneToMany.Models.ViewModel
         public string Title { get; set; }
 
         [Required]
+        [DisplayName("Select Genre Type")]
         public Guid? GenreId { get; set; }
 
         public IEnumerable<SelectListItem>? Genres { get; set; }

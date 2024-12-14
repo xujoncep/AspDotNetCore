@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MvcMovieOneToMany.Models
+namespace MvcMovieOneToMany.Models.ViewModel
 {
-    public class Genre
+    public class CreateGenreViewModel
     {
-        [Key]
         public Guid GenreId { get; set; }
+
+        [Required]
+        [Remote(action: "IsGenreExists", controller: "Genre")]
         public string GenreName { get; set; }
-        
+
         //public ICollection<Movie>? Movies { get; set; }
         //public List<Movie>? Movies { get;set; }
         public IEnumerable<Movie>? Movies { get; set; }
-
     }
 }
