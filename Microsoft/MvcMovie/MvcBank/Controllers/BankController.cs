@@ -138,12 +138,14 @@ namespace MvcBank.Controllers
 
             if (data != null)
             {
-                return Json($"Genre {BankName} already Exists!");
+                //return BadRequest($"Bank {BankName} already Exists!");
+                return Json($"Bank {BankName} already Exists!");
             }
 
             else
             {
                 return Json(true);
+                //return Ok(true);
             }
 
 

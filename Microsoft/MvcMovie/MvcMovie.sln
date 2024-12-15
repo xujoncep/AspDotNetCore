@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcMovieOneToMany", "MvcMov
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentApi", "FluentApi\FluentApi.csproj", "{5330CB7E-D8D8-4F08-9837-37522B6EA433}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBank", "MvcBank\MvcBank.csproj", "{F3DD6EFD-DE6B-456B-AA4F-D8B9707F509F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcBank", "MvcBank\MvcBank.csproj", "{F3DD6EFD-DE6B-456B-AA4F-D8B9707F509F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormSubmission", "FormSubmission\FormSubmission.csproj", "{34ADA741-DB64-489A-B04A-B4269A4DAD52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F3DD6EFD-DE6B-456B-AA4F-D8B9707F509F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3DD6EFD-DE6B-456B-AA4F-D8B9707F509F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3DD6EFD-DE6B-456B-AA4F-D8B9707F509F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34ADA741-DB64-489A-B04A-B4269A4DAD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34ADA741-DB64-489A-B04A-B4269A4DAD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34ADA741-DB64-489A-B04A-B4269A4DAD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34ADA741-DB64-489A-B04A-B4269A4DAD52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
