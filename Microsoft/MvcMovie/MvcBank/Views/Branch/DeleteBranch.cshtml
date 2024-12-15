@@ -1,0 +1,21 @@
+﻿@model MvcBank.Models.Branch
+@{
+    ViewData["Title"] = "DeleteBranch";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1> Delete Branch Section</h1>
+</div>
+
+<div class="fw-bold text-center text-danger py-3">
+    <h2>Branch Name: @TempData["BranchName"]</h2>
+    <h2>Are you sure to delete this Branch?</h2>
+</div>
+
+
+<form asp-action="DeleteBranch" class="text-center py-3">
+
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="BranchList" class="btn btn-primary">Back to List</a>
+
+</form>

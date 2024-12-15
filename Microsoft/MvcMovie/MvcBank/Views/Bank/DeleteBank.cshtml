@@ -1,0 +1,21 @@
+﻿@model MvcBank.Models.Bank
+@{
+    ViewData["Title"] = "DeleteBank";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Delete Bank Section</h1>
+</div>
+
+<div class="fw-bold text-center text-danger py-3">
+    <h2>Bank Name: @TempData["BankName"]</h2>
+    <h2>Are you sure to delete this Bank?</h2>
+</div>
+
+
+<form asp-action="DeleteBank" class="text-center py-3">
+
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="BankList" class="btn btn-primary">Back to List</a>
+
+</form>

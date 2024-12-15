@@ -1,0 +1,34 @@
+﻿@model MvcBank.Models.Bank
+@{
+    ViewData["Title"] = "EditBank";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1>Edit Bank Section</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditBank" asp-controller="Bank">
+
+            <div class="form-group">
+                <label asp-for="BankId" class="form-label"></label>
+                <input asp-for="BankId" class="form-control" readonly />
+                <span asp-validation-for="BankId" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="BankName" class="form-label"></label>
+                <input asp-for="BankName" class="form-control" />
+                <span asp-validation-for="BankName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="BankList" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>

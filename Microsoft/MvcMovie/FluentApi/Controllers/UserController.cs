@@ -133,6 +133,8 @@ namespace FluentApi.Controllers
                 {
                     return NotFound();
                 }
+
+
                 user.UserName = viewModel.UserName;
                 user.Birthdate = viewModel.Birthdate;
                 user.Passport.PassportNumber = viewModel.PassportNumber;

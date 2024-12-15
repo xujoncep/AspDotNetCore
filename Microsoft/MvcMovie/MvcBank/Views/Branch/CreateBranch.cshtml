@@ -1,0 +1,46 @@
+﻿@model MvcBank.Models.ViewModels.CreateBranchVM
+@{
+    ViewData["Title"] = "CreateBranch";
+}
+
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1> Create Branch  Section</h1>
+</div>
+
+<div>
+    <div class="row fw-bold">
+        <div class="col-6 offset-2">
+            <form method="post" asp-action="CreateBranch">
+
+                <div class="form-group">
+                    <label asp-for="BranchName"></label>
+                    <input type="text" asp-for="BranchName" class="form-control" placeholder="Enter Branch Name" />
+                    <span asp-validation-for="BranchName" class="text-danger"></span>
+                </div>
+                <br />
+
+
+                <div class="form-group">
+                    <label asp-for="BankId" class="control-label"></label>
+                    <select asp-for="BankId" class="form-control" asp-items="Model.Banks">
+                        <option value="">Select a Bank </option>
+                    </select>
+                    <span asp-validation-for="BankId" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

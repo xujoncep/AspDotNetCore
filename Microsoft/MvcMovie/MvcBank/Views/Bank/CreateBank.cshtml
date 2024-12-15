@@ -1,0 +1,34 @@
+﻿@model MvcBank.Models.ViewModels.CreateBankVM
+@{
+    ViewData["Title"] = "CreateBank";
+}
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1> Create Bank  Section</h1>
+</div>
+
+<div>
+    <div class="row fw-bold">
+        <div class="col-6 offset-2">
+            <form method="post" asp-action="CreateBank">
+                <div class="form-group">
+                    <label asp-for="BankName"></label>
+                    <input type="text" asp-for="BankName" class="form-control" placeholder="Enter Bank Name" />
+                    <span asp-validation-for="BankName" class="text-danger"></span>
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

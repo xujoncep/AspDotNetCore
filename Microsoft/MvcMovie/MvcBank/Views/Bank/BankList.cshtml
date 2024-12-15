@@ -1,0 +1,70 @@
+﻿@model List<MvcBank.Models.Bank>
+@{
+    ViewData["Title"] = "BankList";
+}
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class=" alert alert-success fw-bold">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["UpdateMessage"] != null)
+{
+    <div class=" alert alert-warning fw-bold">
+        @TempData["UpdateMessage"]
+    </div>
+}
+@if (TempData["DeleteMessage"] != null)
+{
+    <div class=" alert alert-danger fw-bold">
+        @TempData["DeleteMessage"]
+    </div>
+}
+<div class="fw-bold text-center bg-primary bg-opacity-25 py-3">
+    <h1> Bank List Section</h1>
+</div>
+
+
+<p class="align-items-md-start mt-2">
+    <a asp-controller="Bank" asp-action="CreateBank" class="btn btn-info fw-bold">Add New Bank</a>
+</p>
+
+
+<div class="container ">
+
+    @if (Model != null)
+    {
+        <table class="table table-bordered table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Bank Id</th>
+                    <th>Bank Name</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.BankId</td>
+                        <td>@item.BankName</td>
+                        <td>
+                            <a asp-action="EditBank" asp-route-id="@item.BankId" class="btn btn-secondary">Update</a>
+                            <a asp-action="DeleteBank" asp-route-id="@item.BankId" class="btn btn-danger">Delete</a>
+
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+
+</div>
+
