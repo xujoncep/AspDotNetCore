@@ -1,0 +1,47 @@
+﻿@model List<Student>
+@{
+    ViewData["Title"] = "StudentList";
+}
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class=" alert alert-success fw-bold">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class=" alert alert-success fw-bold">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<h1 class="text-center">StudentList</h1>
+
+<div class="container text-center ">
+    <table class="table table-bordered table-hover table-striped text-center">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                </tr>
+            }
+           
+        </tbody>
+        
+    </table>
+</div>

@@ -3,27 +3,12 @@
     ViewData["Title"] = "StornglyTypedForm";
 }
 
-@if (@ViewBag.txtId != null)
-{
-    <div>
-
-        <b>ID: @ViewBag.txtId </b><br />
-        <b>Name: @ViewBag.txtName </b><br />
-        <b>Email: @ViewBag.txtEmail</b>
-
-    </div>
-
-}
 
 <h1>StornglyTypedForm</h1>
 
 @using (Html.BeginForm("StornglyTypedForm", "Home", FormMethod.Post))
 {
     <table>
-        <tr>
-            <td>Enter Id: </td>
-            <td>@Html.TextBoxFor(m => m.Id)</td>
-        </tr>
         <tr>
             <td>Enter Name: </td>
             <td>@Html.TextBoxFor(m => m.Name)</td>

@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="mb-3">
+            <label class="form-label">Enter First Number</label>
+            <input type="text" class="form-control" id="number1" placeholder="Enter First Number " />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Enter Second Number</label>
+            <input type="text" class="form-control" id="number2" placeholder="Enter Second Number " />
+        </div>
+        
+        <div class="mb-3">
+            <button class="btn btn-info" onclick="DisplaySum()">Add</button>
+            <button class="btn btn-info" onclick="DisplaySub()">Subtract</button>
+            <button class="btn btn-info" onclick="Calculate()">Calculator</button>
+        </div>
+        
+
+        <hr />
+        <br />
+
+        <div>
+            <label class="form-label"> Result</label>
+            <h3 id="result"></h3>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    // Checking JavaScript
+    
+    // $(document).ready(function () {
+
+    //     alert("Welcome");
+    // });
+
+    //Display full name
+    // function Display()
+    // {
+    //     var firstName = $("#number1").val();
+    //     var lastName = $("#number2").val();
+    //     var data = firstName + " " + lastName;
+
+    //     $("#result").text(data);
+    // }
+
+    function DisplaySum() 
+    { 
+        var num1 = parseInt($("#number1").val());
+        var num2 = parseInt($("#number2").val());
+
+        $.ajax({
+
+            type: 'POST',
+            url: '@Url.Action("Add")',
+            data: { number1: num1, number2: num2 },
+            dataType: 'text',
+            success: function (response, status, xhr) {
+                $("#result").text(response);
+            },
+            error: function (req, status, error) {
+                $("#result").text(error);
+            }
+
+        });  
+    }
+
+    function DisplaySub() {
+        var num1 = parseInt($("#number1").val());
+        var num2 = parseInt($("#number2").val());
+
+        $.ajax({
+
+            type: 'POST',
+            url: '@Url.Action("Sub")',
+            data: { number1: num1, number2: num2 },
+            dataType: 'text',
+            success: function (response, status, xhr) {
+                $("#result").text(response);
+            },
+            error: function (req, status, error) {
+                $("#result").text(error);
+            }
+
+        });
+    }
+
+    function Calculate() {
+        var num1 = parseInt($("#number1").val());
+        var num2 = parseInt($("#number2").val());
+
+        $.ajax({
+
+            type: 'POST',
+            url: '@Url.Action("Calculation")',
+            data: { number1: num1, number2: num2 },
+            dataType: 'json',
+            success: function (response, status, xhr) {
+                data = "Addition: " + response.add +
+                    "<br> Subtraction: " + response.sub +
+                    "<br> Multiplication: " + response.mul;
+                $("#result").html(data);
+            },
+            error: function (req, status, error) {
+                $("#result").text(error);
+            }
+
+        });
+    }
+
+</script>

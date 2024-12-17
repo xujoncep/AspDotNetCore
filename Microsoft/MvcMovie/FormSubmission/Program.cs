@@ -1,3 +1,6 @@
+using FormSubmission.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace FormSubmission
 {
     public class Program
@@ -5,6 +8,10 @@ namespace FormSubmission
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<FormDbContext>( options =>
+            
+                        options.UseSqlServer(builder.Configuration.GetConnectionString("FormConnection")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
