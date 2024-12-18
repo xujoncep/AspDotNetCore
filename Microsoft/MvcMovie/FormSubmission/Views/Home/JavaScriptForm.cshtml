@@ -6,7 +6,6 @@
 
 <h2>Create Student</h2>
 
-<!-- Form -->
 <div id="form-container">
     <form id="studentForm">
         <div class="form-group">
@@ -27,15 +26,17 @@
 <div id="response-message" class="mt-3"></div>
 
 
+@* fetch with then  *@
 
-
-@* Script *@
 <script type="text/javascript">
     
     document.getElementById("studentForm").addEventListener("submit", function (event) {
         event.preventDefault();
+        
         // const fd = new FormData(studentForm);
-        // console.log(fd);
+        // console.log(fd.get('name'));
+        // debugger;
+        
 
         const name = document.getElementById("name").value;
         const email = document.getElementById("email").value;
@@ -45,8 +46,6 @@
             Email: email
         };
 
-
-        
         fetch("/Home/JavaScriptForm", {
             method: "POST",
             headers: {
@@ -61,7 +60,6 @@
                 document.getElementById("response-message").innerHTML =
                     `<div class="alert alert-success">${data.message}</div>`;
             } 
-            
             else {
                 document.getElementById("response-message").innerHTML =
                     `<div class="alert alert-danger">${data.message}</div>`;
@@ -75,8 +73,62 @@
 </script>
 
 
-@* <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
+@* fetch with async-await *@
+
+@* <script type="text/javascript">
+    document.getElementById("studentForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        const formData = {
+            Name: name,
+            Email: email
+        };
+
+        try 
+        {
+            const response = await fetch("/Home/JavaScriptForm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById("response-message").innerHTML =
+                    `<div class="alert alert-success">${data.message}</div>`;
+            } else {
+                document.getElementById("response-message").innerHTML =
+                    `<div class="alert alert-danger">${data.message}</div>`;
+            }
+        } 
+        
+        catch (error) {
+            document.getElementById("response-message").innerHTML =
+                `<div class="alert alert-danger">An error occurred: ${error.message}</div>`;
+            console.error("Error details:", error);
+        }
+    });
+</script>
+ *@
+
+@* window.location.href = '@Url.Action("StudentList", "Home")';
+ *@
+
+@* data submit with axios *@
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+@* <script>
         document.getElementById("studentForm").addEventListener("submit", function (event) {
             event.preventDefault();
 
@@ -90,6 +142,8 @@
                     if (response.data.success) {
                         document.getElementById("response-message").innerHTML =
                             `<div class="alert alert-success">${response.data.message}</div>`;
+                           
+                           window.location.href = '/Home/StudentList'
                     } 
                     
                     else {

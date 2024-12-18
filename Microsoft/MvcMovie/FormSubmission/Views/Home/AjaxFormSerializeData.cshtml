@@ -1,7 +1,7 @@
 ﻿@model FormSubmission.Models.Student
 
 @{
-    ViewData["Title"] = "Create Student";
+    ViewData["Title"] = "Create Student Serialize From data";
 }
 
 <h1>Create Student</h1>
@@ -29,17 +29,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // Standalone function to serialize form data into JSON
+ 
     function serializeFormJSON(formElement) {
         var json = {};
-        // Use FormData API to collect form data
+       
         var formData = new FormData(formElement);
-
-        // Loop through form data and add it to the JSON object
         formData.forEach(function (value, key) {
             json[key] = value;
         });
@@ -47,24 +44,29 @@
         return json;
     }
 
-    // Document Ready Event
+    
     $(function () {
         $('#studentForm').on('submit', function (event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault(); 
 
-            // Serialize form to JSON using the standalone function
-            var formData = serializeFormJSON(this); // 'this' refers to the form element
-            console.log(formData); // Debugging output
+            var formData = serializeFormJSON(studentForm); 
+            //console.log(formData);
 
-            // AJAX call to submit form data
+            
             $.ajax({
-                url: '@Url.Action("AjaxFormSerializeData", "Home")', // Controller Action URL
+                url: '@Url.Action("AjaxFormSerializeData", "Home")', 
                 type: 'POST',
-                contentType: 'application/json', // Set content type to JSON
-                data: JSON.stringify(formData), // Convert JSON to string
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
                 success: function (response) {
-                    var alertClass = response.success ? 'alert-success' : 'alert-danger';
-                    $('#response-message').html(`<div class="alert ${alertClass}">${response.message}</div>`);
+                if (response.success) {
+                    $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
+
+                    window.location.href='/Home/StudentList';
+                    }
+                else {
+                    $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
                 },
                 error: function () {
                     $('#response-message').html('<div class="alert alert-danger">An error occurred while submitting the form.</div>');

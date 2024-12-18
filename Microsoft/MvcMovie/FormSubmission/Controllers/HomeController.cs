@@ -21,18 +21,17 @@ namespace FormSubmission.Controllers
            
             return View();
         }
-
-        public IActionResult StudentList()
-        {
-            var data = _context.Students.ToList();
-            return View(data);
-        }
         public IActionResult Privacy()
         {
             return View();
         }
 
-        
+      
+        public IActionResult StudentList()
+        {
+            var data = _context.Students.ToList();
+            return View(data);
+        }  
         
         [HttpGet]
         public IActionResult WeaklyTypedForm()
@@ -46,9 +45,11 @@ namespace FormSubmission.Controllers
         {
             if(ModelState.IsValid)
             {
-                var data = new Student();
-                data.Name = txtName;
-                data.Email = txtEmail;
+                var data = new Student
+                {
+                    Name = txtName,
+                    Email = txtEmail
+                };
 
                 _context.Students.Add(data);
                 _context.SaveChanges();
@@ -71,9 +72,6 @@ namespace FormSubmission.Controllers
            
             if(ModelState.IsValid)
             {
-                //var data = new Student();
-                //data.Name=student.Name;
-                //data.Email=student.Email;
                 _context.Students.Add(student);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(StudentList));
@@ -93,18 +91,13 @@ namespace FormSubmission.Controllers
             {
                 _context.Add(model);
                 _context.SaveChanges();
-                //return Json(new { success = true, message = "Student data saved successfully!" });
-
-                TempData["SuccessMessage"] = "Student data saved successfully!";
-                return RedirectToAction(nameof(StudentList));
+                return Json(new { success = true, message = "Data saved successfully!" });
             }
 
-            //return Json(new { success = false, message = "Invalid data. Please check your input." });
-            
-            TempData["ErrorMessage"] = "Invalid data. Please check your input.";
-            return View();
+            return Json(new { success = false, message = "Invalid data." });
         }
 
+        
         [HttpGet]
         public IActionResult AjaxFormData()
         {
@@ -119,10 +112,10 @@ namespace FormSubmission.Controllers
                
                 _context.Students.Add(model);
                 _context.SaveChanges();
-                return Json(new { success = true, message = "Student data saved successfully!" });
+                return Json(new { success = true, message = "Data saved successfully!" });
             }
 
-            return Json(new { success = false, message = "Invalid data. Please check your input." });
+            return Json(new { success = false, message = "Invalid data." });
         }
 
 
@@ -143,7 +136,7 @@ namespace FormSubmission.Controllers
                 return Json(new { success = true, message = "Student saved successfully!" });
             }
 
-            return Json(new { success = false, message = "Failed to save student data." });
+            return Json(new { success = false, message = "Invalid data" });
         }
 
 

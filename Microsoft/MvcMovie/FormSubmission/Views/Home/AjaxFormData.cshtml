@@ -1,7 +1,7 @@
 ﻿@model FormSubmission.Models.Student
 
 @{
-    ViewData["Title"] = "Create Student";
+    ViewData["Title"] = "Create Student Ajax form data";
 }
 
 <h1>Create Student</h1>
@@ -12,6 +12,7 @@
                 <label for="Name">Name</label>
                 <input type="text" id="Name" name="Name" class="form-control" placeholder="Enter Name" required />
             </div>
+            <br />
 
             <div class="form-group">
                 <label for="Email">Email</label>
@@ -32,27 +33,28 @@
     $(document).ready(function () {
         $('#studentForm').submit(function (event) {
             event.preventDefault();
-
             
-            var formData = new FormData(this);
-
+            var formData = new FormData(studentForm);
             $.ajax({
-        url: '@Url.Action("AjaxFormData", "Home")',
-        method: 'POST',
-        data: formData, 
-                processData: false, 
-        contentType: false, 
-                success: function (response) {
-            if (response.success) {
-                $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
-            } else {
-                $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');
-            }
-            },
-        error: function (xhr, status, error) {
-            $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + error + '</div>');
-            }
-            });
+            url: '@Url.Action("AjaxFormData", "Home")',
+            method: 'POST',
+            data: formData, 
+            processData: false, 
+            contentType: false, 
+            success: function (response) {
+                if (response.success) {
+                    $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                    
+                    window.location.href='/Home/StudentList';
+                } 
+                else {
+                    $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+             error: function (xhr, status, error) {
+                    $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + error + '</div>');
+                    }
+                   });
         });
     });
 </script>
