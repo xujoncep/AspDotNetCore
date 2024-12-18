@@ -79,6 +79,8 @@ namespace FormSubmission.Controllers
             return View();
         }
 
+        //fetch-then 
+        [HttpGet]
         public IActionResult JavaScriptForm()
         {
             return View();
@@ -97,7 +99,31 @@ namespace FormSubmission.Controllers
             return Json(new { success = false, message = "Invalid data." });
         }
 
-        
+
+        //Axios
+        [HttpGet]
+        [Route("JavaScriptFormAxios")]
+        public IActionResult JavaScriptFormAxios()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult JavaScriptFormAxios([FromBody] Student model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(model);
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Data saved successfully!" });
+            }
+
+            return Json(new { success = false, message = "Invalid data." });
+        }
+
+
+        //Ajax form Data
+
         [HttpGet]
         public IActionResult AjaxFormData()
         {
@@ -107,18 +133,29 @@ namespace FormSubmission.Controllers
         [HttpPost]
         public IActionResult AjaxFormData(Student model)
         {
+            bool success = false;
+            string message = string.Empty;
             if (ModelState.IsValid)
             {
                
                 _context.Students.Add(model);
                 _context.SaveChanges();
-                return Json(new { success = true, message = "Data saved successfully!" });
+                success = true;
+                message = "Data Saved";
+               // return Json(new { success = true, message = "Data saved successfully!" });
             }
 
-            return Json(new { success = false, message = "Invalid data." });
+            else
+            {
+                 success = false;
+                 message = "Data not Saved";
+            }
+
+            return Json(new { success = $"{success}", message = $"{message}" });
         }
 
 
+        //Ajax Form Serialization
 
         [HttpGet]
         public IActionResult AjaxFormSerializeData()
@@ -136,7 +173,7 @@ namespace FormSubmission.Controllers
                 return Json(new { success = true, message = "Student saved successfully!" });
             }
 
-            return Json(new { success = false, message = "Invalid data" });
+            return Json(new { success = false, message = "Failed to save student data." });
         }
 
 

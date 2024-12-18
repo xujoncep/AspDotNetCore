@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create Student";
 }
 
-<h2>Create Student with Java</h2>
+<h2>Create Student with JavaScript</h2>
 
 <div id="form-container">
     <form id="studentForm">
@@ -25,58 +25,6 @@
 
 <div id="response-message" class="mt-3"></div>
 
-
-
-@* fetch with then  *@
-
-@* <script type="text/javascript">
-    
-    document.getElementById("studentForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-        
-        // const fd = new FormData(studentForm);
-        // console.log(fd.get('name'));
-        // debugger;
-        
-
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-
-        const formData = {
-            Name: name,
-            Email: email
-        };
-
-        fetch("/Home/JavaScriptForm", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json" 
-            },
-            body: JSON.stringify(formData) 
-        })
-        .then(response => response.json()) 
-        .then(data => {
-           
-         
-            
-            if (data.success) {
-                   $('#response-message').html('<div class="alert alert-success">' + data.message + '</div>');
-                    
-                    window.location.href='/Home/StudentList';
-                }
-
-            else {
-                    $('#response-message').html('<div class="alert alert-danger">' + data.message + '</div>');
-                    }
-
-        })
-        .catch(error => {         
-            $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + error + '</div>');
-        });
-    });
-</script> *@
-
-
 @* fetch with async-await *@
 
 <script type="text/javascript">
@@ -91,9 +39,9 @@
             Email: email
         };
 
-        try 
+        try
         {
-            const response = await fetch("/Home/JavaScriptForm", {
+            const response = await fetch("/Home/JavaScriptForm2", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -110,14 +58,12 @@
             if (data.success) {
                 document.getElementById("response-message").innerHTML =
                     `<div class="alert alert-success">${data.message}</div>`;
-                    window.location.href = '@Url.Action("StudentList", "Home")';
-            } 
-            else {
+            } else {
                 document.getElementById("response-message").innerHTML =
                     `<div class="alert alert-danger">${data.message}</div>`;
             }
-        } 
-        
+        }
+
         catch (error) {
             document.getElementById("response-message").innerHTML =
                 `<div class="alert alert-danger">An error occurred: ${error.message}</div>`;
@@ -125,7 +71,3 @@
         }
     });
 </script>
-
-
-@* window.location.href = '@Url.Action("StudentList", "Home")';
- *@
