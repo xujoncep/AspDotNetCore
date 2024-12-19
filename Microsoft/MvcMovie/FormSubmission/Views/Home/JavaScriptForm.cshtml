@@ -41,6 +41,8 @@
 
         const name = document.getElementById("name").value;
         const email = document.getElementById("email").value;
+        //var name = $("#name").val();
+        //formData.append("name", $("#name").val());
 
         // if (name = '' && email == '') {
         //     $('#response-message').html('<div class="alert alert-success">All Fields are required! </div>');
@@ -106,10 +108,6 @@
                 },
                 body: JSON.stringify(formData)
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
 
             const data = await response.json();
 
