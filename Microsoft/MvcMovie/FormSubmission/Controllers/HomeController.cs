@@ -53,7 +53,7 @@ namespace FormSubmission.Controllers
 
                 _context.Students.Add(data);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(StudentList));
+                return RedirectToAction("Index","Students");
 
             }
             return View();
@@ -74,7 +74,7 @@ namespace FormSubmission.Controllers
             {
                 _context.Students.Add(student);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(StudentList));
+                return RedirectToAction("Index", "Students");
             }
             return View();
         }
@@ -89,14 +89,17 @@ namespace FormSubmission.Controllers
         [HttpPost]
         public IActionResult JavaScriptForm([FromBody] Student model)
         {
+            bool success = false;
+            string message = "Data not saved!";
             if (ModelState.IsValid)
             {
                 _context.Add(model);
                 _context.SaveChanges();
-                return Json(new { success = true, message = "Data saved successfully!" });
+                success = true;
+                message = "Data Saved";
             }
 
-            return Json(new { success = false, message = "Invalid data." });
+            return Json(new { success = $"{success}", message = $"{message}" });
         }
 
 
@@ -111,14 +114,17 @@ namespace FormSubmission.Controllers
         [HttpPost]
         public IActionResult JavaScriptFormAxios([FromBody] Student model)
         {
+            bool success = false;
+            string message = "Data not saved!";
             if (ModelState.IsValid)
             {
                 _context.Add(model);
                 _context.SaveChanges();
-                return Json(new { success = true, message = "Data saved successfully!" });
+                success = true;
+                message = "Data Saved";
             }
 
-            return Json(new { success = false, message = "Invalid data." });
+            return Json(new { success = $"{success}", message = $"{message}" });
         }
 
 
@@ -134,7 +140,7 @@ namespace FormSubmission.Controllers
         public IActionResult AjaxFormData(Student model)
         {
             bool success = false;
-            string message = string.Empty;
+            string message = "Data not saved!";
             if (ModelState.IsValid)
             {
                
@@ -144,12 +150,11 @@ namespace FormSubmission.Controllers
                 message = "Data Saved";
                // return Json(new { success = true, message = "Data saved successfully!" });
             }
-
-            else
-            {
-                 success = false;
-                 message = "Data not Saved";
-            }
+            //else
+            //{
+            //     success = false;
+            //     message = "Data not Saved";
+            //}
 
             return Json(new { success = $"{success}", message = $"{message}" });
         }
@@ -166,14 +171,17 @@ namespace FormSubmission.Controllers
         [HttpPost]
         public IActionResult AjaxFormSerializeData([FromBody] Student model)
         {
+            bool success = false;
+            string message = "Data not saved!";
             if (ModelState.IsValid)
             {
                 _context.Students.Add(model);
                 _context.SaveChanges();
-                return Json(new { success = true, message = "Student saved successfully!" });
+                success = true;
+                message = "Data Saved";
             }
 
-            return Json(new { success = false, message = "Failed to save student data." });
+            return Json(new { success = $"{success}", message = $"{message}" });
         }
 
 

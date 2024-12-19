@@ -62,7 +62,9 @@
                 if (response.success) {
                     $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
 
-                    window.location.href='/Home/StudentList';
+                        setTimeout(() => {
+                            window.location.href = '/Students/Index';
+                        }, 2000);
                     }
                 else {
                     $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');

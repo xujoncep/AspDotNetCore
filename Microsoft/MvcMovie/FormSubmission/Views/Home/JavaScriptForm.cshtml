@@ -4,18 +4,18 @@
     ViewData["Title"] = "Create Student";
 }
 
-<h2>Create Student with Java</h2>
+<h2>Create Student with JavaScript</h2>
 
 <div id="form-container">
     <form id="studentForm">
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" class="form-control" placeholder="Enter Name" required />
+            <input type="text" id="name" class="form-control" placeholder="Enter Name" required/>
         </div>
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" class="form-control" placeholder="Enter Email" required />
+            <input type="email" id="email" class="form-control" placeholder="Enter Email" required/>
         </div>
 
         <br />
@@ -29,7 +29,7 @@
 
 @* fetch with then  *@
 
-@* <script type="text/javascript">
+<script type="text/javascript">
     
     document.getElementById("studentForm").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -41,6 +41,11 @@
 
         const name = document.getElementById("name").value;
         const email = document.getElementById("email").value;
+
+        // if (name = '' && email == '') {
+        //     $('#response-message').html('<div class="alert alert-success">All Fields are required! </div>');
+        //     return;
+        // }
 
         const formData = {
             Name: name,
@@ -56,30 +61,31 @@
         })
         .then(response => response.json()) 
         .then(data => {
-           
-         
-            
+
             if (data.success) {
-                   $('#response-message').html('<div class="alert alert-success">' + data.message + '</div>');
-                    
-                    window.location.href='/Home/StudentList';
-                }
+                $('#response-message').html('<div class="alert alert-success">' + data.message + '</div>');
+                    //window.location.href = '/Students/Index';
+                setTimeout(() => {
+                    window.location.href = '/Students/Index';
+                }, 2000);
+            }
 
             else {
                     $('#response-message').html('<div class="alert alert-danger">' + data.message + '</div>');
-                    }
+                    
+            }
 
         })
         .catch(error => {         
             $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + error + '</div>');
         });
     });
-</script> *@
+</script>
 
 
 @* fetch with async-await *@
 
-<script type="text/javascript">
+@* <script type="text/javascript">
     document.getElementById("studentForm").addEventListener("submit", async function (event) {
         event.preventDefault();
 
@@ -121,10 +127,9 @@
         catch (error) {
             document.getElementById("response-message").innerHTML =
                 `<div class="alert alert-danger">An error occurred: ${error.message}</div>`;
-            console.error("Error details:", error);
         }
     });
-</script>
+</script> *@
 
 
 @* window.location.href = '@Url.Action("StudentList", "Home")';

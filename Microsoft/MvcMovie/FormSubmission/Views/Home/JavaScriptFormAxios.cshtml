@@ -42,20 +42,21 @@
             axios.post("/Home/JavaScriptFormAxios", formData)
                 .then(response => {
                     if (response.data.success) {
-                        document.getElementById("response-message").innerHTML =
-                            `<div class="alert alert-success">${response.data.message}</div>`;
+                        // document.getElementById("response-message").innerHTML =
+                        //     `<div class="alert alert-success">${response.data.message}</div>`;
 
-                           window.location.href = '/Home/StudentList'
+                        $('#response-message').html('<div class="alert alert-success">' + response.data.message + '</div>');
+                        setTimeout(() => {
+                            window.location.href = '/Students/Index';
+                        }, 2000);
                     }
 
                     else {
-                        document.getElementById("response-message").innerHTML =
-                            `<div class="alert alert-danger">${response.data.message}</div>`;
+                        $('#response-message').html('<div class="alert alert-success">' + response.data.message + '</div>');
                     }
                 })
                 .catch(error => {
-                    document.getElementById("response-message").innerHTML =
-                        `<div class="alert alert-danger">An error occurred: ${error.message}</div>`;
+                   $('#response-message').html('<div class="alert alert-danger">An error occurred An error occurred: ' + error + '</div > ');
                 });
         });
 </script>
