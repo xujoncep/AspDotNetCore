@@ -1,0 +1,96 @@
+﻿@model IEnumerable<BankApplication.Models.Entity.Branch>
+@{
+    ViewData["Title"] = "CreateMultiple";
+}
+
+<h1 class="text-center">Create Multiple Branch</h1>
+<hr />
+<p>
+    <a id="addRow" class="btn btn-info float-end m-2">Add-Record</a>
+</p>
+
+<form action="/" method="post">
+    
+</form>
+<div id="spanRow">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Branch Name
+                </th>
+                <th>
+                    Branch Logo
+                </th>
+                <th>
+                    Bank
+                </th>
+                <th>
+                    Is Active
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody id="branchTableBody">
+            <tr>
+                <td>
+                    <input type="text" class="form-control" />
+                </td>
+                <td>
+                    <input type="file" class="form-control" />
+                </td>
+                <td>
+                    <select class="form-control" asp-items="ViewBag.BankId">
+                        <option>--Select--</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="checkbox" class="form-check-input" />
+                </td>
+                <td>
+                    <a class="removeRow btn btn-danger">Remove</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a id="saveAll" class="btn btn-success m-2" asp-action="CreateMultiple">Save All Record</a>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#addRow').click(function () {
+            var newRow = `<tr>
+                <td>
+                    <input type="text" class="form-control" />
+                </td>
+                <td>
+                    <input type="file" class="form-control" />
+                </td>
+                <td>
+                    <select class="form-control" asp-items="ViewBag.BankId">
+                        <option>--Select--</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="checkbox" class="form-check-input" />
+                </td>
+                <td>
+                    <a class="removeRow btn btn-danger">Remove</a>
+                </td>
+            </tr>`;
+            $('#branchTableBody').append(newRow);
+        });
+
+        $(document).on('click', '.removeRow', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+</script>

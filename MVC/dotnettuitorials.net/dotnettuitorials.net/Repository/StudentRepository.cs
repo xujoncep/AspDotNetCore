@@ -8,11 +8,15 @@ namespace dotnettuitorials.net.Repository
         public StudentRepository() 
         {
             string filePath = @"D:\DotNet\MVC\dotnettuitorials.net\dotnettuitorials.net\Log\Log.txt";
-            string contentToWrite = $"StudentRepository Object Created: @{DateTime.Now.ToString()}";
-            using (StreamWriter writer = new StreamWriter(filePath, true))
+            if (File.Exists(filePath))
             {
-                writer.WriteLine(contentToWrite);
+                Directory.CreateDirectory(filePath);
             }
+            string contentToWrite = $"StudentRepository Object Created: @{DateTime.Now.ToString()}";
+            //using (StreamWriter writer = new StreamWriter(filePath, true))
+            //{
+            //    writer.WriteLine(contentToWrite);
+            //}
 
         }
         public List<Student> DataSource()
