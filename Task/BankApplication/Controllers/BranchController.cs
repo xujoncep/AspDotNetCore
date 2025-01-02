@@ -98,11 +98,12 @@ namespace BankApplication.Controllers
         public IActionResult CreateMultiple()
         {
             ViewData["BankId"] = new SelectList(_context.Banks, "BankId", "BankName");
+ 
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateMultiple(List<Branch> branches)
+        public async Task<IActionResult> CreateMultiple(List<Branch> branches)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +111,7 @@ namespace BankApplication.Controllers
                 {
                     _context.Add(branch);
                 }
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BankId"] = new SelectList(_context.Banks, "BankId", "BankName");
