@@ -1,0 +1,68 @@
+﻿@model List<BankApplication.Models.ViewModels.CreateBankVM>
+
+<h1>Create Multiple Banks</h1>
+
+<form asp-action="CreateMultiple" method="post" enctype="multipart/form-data">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Bank Name</th>
+                <th>Logo</th>
+                <th>Bank Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="banks-container">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="[@i].BankName" value="@Model[i].BankName" required />
+                    </td>
+                    <td>
+                        <input type="file" class="form-control" name="[@i].Logo" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="[@i].BankAddress" value="@Model[i].BankAddress" required />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" id="add-bank" class="btn btn-secondary">Add New Bank</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#add-bank').click(function () {
+            const rowIndex = $('#banks-container tr').length;
+            const newRow = `
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="[${rowIndex}].BankName" required />
+                    </td>
+                    <td>
+                        <input type="file" class="form-control" name="[${rowIndex}].Logo" />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="[${rowIndex}].BankAddress" required />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#banks-container').append(newRow);
+        });
+
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+</script>

@@ -47,7 +47,53 @@ namespace BankApplication.Controllers
             return View(bank);
         }
 
-        
+
+        public IActionResult CreateMultiple()
+        {
+            return View(new List<CreateBankVM> { new CreateBankVM() }); // Start with one bank by default
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMultiple(List<CreateBankVM> banks)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var viewModel in banks)
+                {
+                    string logoUrl = null;
+
+                    if (viewModel.Logo != null)
+                    {
+                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        await viewModel.Logo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                        logoUrl = $"/MyFile/images/{uniqueFileName}";
+                    }
+
+                    Bank bank = new Bank
+                    {
+                        BankName = viewModel.BankName,
+                        Logo = logoUrl,
+                        BankAddress = viewModel.BankAddress
+                    };
+
+                    _context.Add(bank);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(banks);
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -219,5 +265,44 @@ namespace BankApplication.Controllers
             var contentType = "image/jpeg";
             return PhysicalFile(filePath, contentType);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBranches(int BankId, List<CreateBranchVM> Branches)
+        {
+            if (Branches != null && Branches.Any())
+            {
+                foreach (var branchVM in Branches)
+                {
+                    string uniqueFileName = null;
+                    if (branchVM.BranchLogo != null)
+                    {
+                        string uploadFolder = Path.Combine(_env.WebRootPath, "images");
+                        if (!Directory.Exists(uploadFolder))
+                        {
+                            Directory.CreateDirectory(uploadFolder);
+                        }
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + branchVM.BranchLogo.FileName;
+                        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                        await branchVM.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                    }
+
+                    var branch = new Branch
+                    {
+                        BranchName = branchVM.BranchName,
+                        BranchLogo = uniqueFileName,
+                        IsActive = branchVM.IsActive,
+                        BankId = BankId
+                    };
+
+                    _context.Branches.Add(branch);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = BankId });
+        }
+
     }
 }

@@ -1,91 +1,102 @@
-﻿@model BankApplication.Models.Entity.Branch
-@{
-    ViewData["Title"] = "CreateMultiple";
-}
+﻿@model List<BankApplication.Models.ViewModels.CreateBranchVM>
 
-<h1 class="text-center">Create Multiple Branch</h1>
-<hr />
-<p>
-    <a id="addRow" class="btn btn-info float-end m-2">Add-Record</a>
-</p>
+<h1>Create Multiple Branches</h1>
 
-<form id="branchForm" action="/Branch/CreateMultiple" method="post">
-    <div id="spanRow">
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
+<form asp-action="CreateMultiple" method="post" enctype="multipart/form-data">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Branch Name</th>
+                <th>Branch Logo</th>
+                <th>Status</th>
+                <th>Bank</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="branches-container">
+            @for (int i = 0; i < Model.Count; i++)
+            {
                 <tr>
-                    <th>Branch Name</th>
-                    <th>Branch Logo</th>
-                    <th>Bank</th>
-                    <th>Is Active</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="branchTableBody">
-                <tr>
-                    <td><input type="text" name="Branches[0].BranchName" class="form-control" /></td>
-                    <td><input type="file" name="Branches[0].BranchLogo" class="form-control" /></td>
                     <td>
-                        <select name="Branches[0].BankId" class="form-control" asp-items="ViewBag.BankId">
-                            <option>--Select--</option>
+                        <input type="text" class="form-control" name="[@i].BranchName" value="@Model[i].BranchName" required />
+                    </td>
+                    <td>
+                        <input type="file" class="form-control" name="[@i].BranchLogo" />
+                    </td>
+                    <td>
+                        <select class="form-control" name="[@i].IsActive">
+                            <option value="true" selected="@(Model[i].IsActive)">Active</option>
+                            <option value="false" selected="@(Model[i].IsActive == false)">Inactive</option>
                         </select>
                     </td>
-                    <td><input type="checkbox" name="Branches[0].IsActive" class="form-check-input" /></td>
-                    <td><a class="removeRow btn btn-danger">Remove</a></td>
+                   
+                    
+                    <td>
+                        <select class="form-control" name="[@i].BankId">
+                            @if (ViewData["Banks"] is IEnumerable<SelectListItem> banks)
+                            {
+                                @foreach (var bank in banks)
+                                {
+                                    <option value="@bank.Value" selected="@(bank.Value == Model[i].BankId.ToString())">
+                                        @bank.Text
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </td>
+                     
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <button type="submit" id="saveAll" class="btn btn-success m-2">Save All Record</button>
-    </div>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" id="add-branch" class="btn btn-secondary">Add New Branch</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
-
-<script type="text/javascript">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
     $(document).ready(function () {
-        var rowIndex = 1;
-
-        $('#addRow').click(function () {
-            var newRow = `<tr>
-                <td><input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" /></td>
-                <td><input type="file" name="Branches[${rowIndex}].BranchLogo" class="form-control" /></td>
-                <td>
-                    <select name="Branches[${rowIndex}].BankId" class="form-control" asp-items="ViewBag.BankId">
-                        <option>--Select--</option>
-                    </select>
-                </td>
-                <td><input type="checkbox" name="Branches[${rowIndex}].IsActive" class="form-check-input" /></td>
-                <td><a class="removeRow btn btn-danger">Remove</a></td>
-            </tr>`;
-            $('#branchTableBody').append(newRow);
-            rowIndex++;
+        $('#add-branch').click(function () {
+            const rowIndex = $('#branches-container tr').length;
+            const newRow = `
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="[${rowIndex}].BranchName" required />
+                    </td>
+                    <td>
+                        <input type="file" class="form-control" name="[${rowIndex}].BranchLogo" />
+                    </td>
+                    <td>
+                        <select class="form-control" name="[${rowIndex}].IsActive">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" name="[${rowIndex}].BankId">
+                            @if (ViewData["Banks"] is IEnumerable<SelectListItem> bankList)
+                            {
+                                @foreach (var bank in bankList)
+                                {
+                                    <option value="@bank.Value">@bank.Text</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#branches-container').append(newRow);
         });
 
-        $(document).on('click', '.removeRow', function () {
+        $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();
-        });
-
-        $('#branchForm').submit(function (event) {
-            event.preventDefault();
-
-            var formData = new FormData(this);
-
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    alert('Record Saved Successfully');
-                },
-                error: function (error) {
-                    alert('Error Occurred');
-                }
-            });
         });
     });
 </script>

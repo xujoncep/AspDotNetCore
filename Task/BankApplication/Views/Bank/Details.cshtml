@@ -8,113 +8,88 @@
 <hr />
 
 <div class="text-center">
-    <dl class="row ">
-        <dt class = "col-sm-2">
+    <dl class="row">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.BankName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BankName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Logo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @if (Model.Logo != null)
             {
                 var fileName = System.IO.Path.GetFileName(Model.Logo);
                 <img src="@Url.Action("GetFile", "Bank", new { fileName })" style="width:50px; height:50px;" />
-
             }
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.BankAddress)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BankAddress)
         </dd>
     </dl>
 </div>
 
-<div class="fw-bold text-center">
-    <h1>Bank All Branches</h1>
+<h3>Add Branches to Bank: @Model.BankName</h3>
 
-    <p>
-        <a id="addRow" class="btn btn-info">Add-Branch</a>
-    </p>
-
-   <table class="table table-bordered table-striped table-hover">
+<form asp-action="AddBranches" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="BankId" value="@Model.BankId" />
+    <table class="table">
         <thead>
             <tr>
                 <th>Branch Name</th>
                 <th>Branch Logo</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody id="branchTableBody">
-
-            @if(Model.Branches != null)
-            {
-
-                @foreach(var item in Model.Branches)
-                {
-                    <tr>
-                        <td>@item.BranchName</td>
-                        <td><img src="/images/@item.BranchLogo" style="width:50px; height:50px" /> </td>
-                        <td>@item.IsActive</td>
-                        <td>
-                            <a asp-action="Edit" asp-controller="Branch" asp-route-id="@item.BranchId">Edit</a> |
-                            <a asp-action="Details" asp-controller="Branch" asp-route-id="@item.BranchId">Details</a> |
-                            <a asp-action="Delete" asp-controller="Branch" asp-route-id="@item.BranchId">Delete</a>
-                        </td>
-                    </tr>
-                }
-
-            }
-            else
-            {
-                <tr>
-                    <td colspan="4" class="text-danger">No Branches Found</td>
-                </tr>
-            }
-            
+        <tbody id="branches-container">
+            <!-- New branches will be added here dynamically -->
         </tbody>
-    
-   </table>
-</div>
+    </table>
 
+    <button type="button" id="add-branch" class="btn btn-secondary">Add New Branch</button>
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.BankId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
-
-<script type="text/javascript">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
     $(document).ready(function () {
-        $('#addRow').click(function () {
-            var newRow = `<tr>
-                <td>
-                    <input type="text" class="form-control" />
-                </td>
-                <td>
-                    <input type="file" class="form-control" />
-                </td>
-                <td>
-                    <input type="checkbox" class="form-check-input" />
-                </td>
-                <td>
-                    <a class="removeRow btn btn-danger">Remove</a>
-                </td>
-            </tr>`;
-            $('#branchTableBody').append(newRow);
+        $('#add-branch').click(function () {
+            const rowIndex = $('#branches-container tr').length;
+            const newRow = `
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="Branches[${rowIndex}].BranchName" required />
+                    </td>
+                    <td>
+                        <input type="file" class="form-control" name="Branches[${rowIndex}].BranchLogo" />
+                    </td>
+                    <td>
+                        <select class="form-control" name="Branches[${rowIndex}].IsActive">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#branches-container').append(newRow);
         });
 
-        $(document).on('click', '.removeRow', function () {
+        $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();
         });
     });
 </script>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.BankId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

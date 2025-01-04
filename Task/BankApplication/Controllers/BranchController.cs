@@ -94,29 +94,55 @@ namespace BankApplication.Controllers
         }
 
 
-        [HttpGet]
         public IActionResult CreateMultiple()
         {
-            ViewData["BankId"] = new SelectList(_context.Banks, "BankId", "BankName");
- 
-            return View();
+            ViewData["Banks"] = new SelectList(_context.Banks, "BankId", "BankName");
+            return View(new List<CreateBranchVM> { new CreateBranchVM() }); // Start with one branch by default
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMultiple(List<Branch> branches)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMultiple(List<CreateBranchVM> branches)
         {
             if (ModelState.IsValid)
             {
-                foreach (var branch in branches)
+                foreach (var viewModel in branches)
                 {
+                    string uniqueFileName = null;
+
+                    if (viewModel.BranchLogo != null)
+                    {
+                        string uploadFolder = Path.Combine(_env.WebRootPath, "images");
+                        if (!Directory.Exists(uploadFolder))
+                        {
+                            Directory.CreateDirectory(uploadFolder);
+                        }
+
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
+                        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+                        await viewModel.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                    }
+
+                    var branch = new Branch
+                    {
+                        BranchName = viewModel.BranchName,
+                        BranchLogo = uniqueFileName,
+                        BankId = viewModel.BankId,
+                        IsActive = viewModel.IsActive
+                    };
+
                     _context.Add(branch);
                 }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BankId"] = new SelectList(_context.Banks, "BankId", "BankName");
-            return View();
+
+            ViewData["Banks"] = new SelectList(_context.Banks, "BankId", "BankName");
+            return View(branches);
         }
+
 
 
 

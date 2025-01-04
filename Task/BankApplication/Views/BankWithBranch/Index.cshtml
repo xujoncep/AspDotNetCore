@@ -1,0 +1,33 @@
+﻿
+@model IEnumerable<BankApplication.Models.Entity.Bank>
+
+<h1>Banks</h1>
+<a class="btn btn-primary" href="/BankWithBranch/Create">Create New Bank</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Branches</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bank in Model)
+        {
+            <tr>
+                <td>@bank.BankName</td>
+                <td>@bank.BankAddress</td>
+                <td>
+                    <ul>
+                        @foreach (var branch in bank.Branches)
+                        {
+                            <li> @if ((@branch.IsActive))
+                                    @branch.BranchName
+                            </li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
