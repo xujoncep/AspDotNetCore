@@ -25,12 +25,190 @@ namespace BankApplication.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var banks = await _context.Banks.ToListAsync();
+            var banks = await _context.Banks.Include(b =>b.Branches).ToListAsync();
             return View(banks);
         }
 
-       
+
+        [HttpGet]
+        public IActionResult CreateBankWithMultipleBranch()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBankWithMultipleBranch(CreateBankWithMultipleBranchVM viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string logo = null;
+
+                if (viewModel.BankLogo != null)
+                {
+                    string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                    if (Directory.Exists(folder) == false)
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
+                    string fileName = Guid.NewGuid().ToString() + "_" + viewModel.BankLogo.FileName;
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.BankLogo.CopyToAsync(stream);
+                    }
+                    logo = $"/Myfile/images/{fileName}";
+                }
+
+                Bank bank = new Bank
+                {
+                    BankName = viewModel.Bank.BankName,
+                    BankAddress = viewModel.Bank.BankAddress,
+                    Logo = logo,
+                    Branches = new List<Branch>()
+                };
+
+                foreach ( var item in viewModel.Branches)
+                {
+                    string branchLogo = null;
+                    if (item.BranchLogo != null)
+                    {
+                        string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                        if (Directory.Exists(folder) == false)
+                        {
+                            Directory.CreateDirectory(folder);
+                        }
+
+                        string fileName = Guid.NewGuid().ToString() + "_" + item.BranchLogo.FileName;
+                        string filePath = Path.Combine(folder, fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            item.BranchLogo.CopyTo(stream);
+                        }
+                        branchLogo = $"/Myfile/images/{fileName}";
+                    }
+
+                    var branch = new Branch
+                    {
+                        BranchName = item.BranchName,
+                        IsActive = item.IsActive,
+                        BranchLogo = branchLogo,
+                    };
+
+                    bank.Branches.Add(branch);
+                }
+
+                _context.Banks.Add(bank);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult CreateBankWithBranch()
+        {
+            return View();
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateBankWithBranch(CreateBankWithBranchVM viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+           
+            string logo = null;
+
+            if (viewModel.BankLogo != null)
+            {
+                string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                if (Directory.Exists(folder) == false)
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string fileName = Guid.NewGuid().ToString() + "_" + viewModel.BankLogo.FileName;
+                string filePath = Path.Combine(folder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await viewModel.BankLogo.CopyToAsync(stream);
+                }
+                logo = $"/Myfile/images/{fileName}";
+            }
+
+            var bank = new Bank
+            {
+                BankName = viewModel.BankName,
+                BankAddress = viewModel.BankAddress,
+                Logo = logo
+            };
+
+            _context.Banks.Add(bank);
+            await _context.SaveChangesAsync();
+
+            
+           
+            string branchLogo = null;
+
+            if (viewModel.BranchLogo != null)
+            {
+                string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                if (!Directory.Exists(folder) == false)
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string fileName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
+                string filePath = Path.Combine(folder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await viewModel.BranchLogo.CopyToAsync(stream);
+                }
+                branchLogo = $"/Myfile/images/{fileName}";
+            }
+
+            var branch = new Branch
+            {
+                BranchName = viewModel.BranchName,
+                IsActive = viewModel.IsActive,
+                BankId = bank.BankId,
+                BranchLogo = branchLogo
+            };
+
+            _context.Branches.Add(branch);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
         public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var bank = await _context.Banks.FirstOrDefaultAsync(m => m.BankId == id);
+            var branches = await _context.Branches.Where(b => b.BankId == id).ToListAsync();
+            if (bank == null)
+            {
+                return NotFound();
+            }
+
+            return View(bank);
+        }
+
+        public async Task<IActionResult> Update(int? id)
         {
             if (id == null)
             {
@@ -50,7 +228,7 @@ namespace BankApplication.Controllers
 
         public IActionResult CreateMultiple()
         {
-            return View(new List<CreateBankVM> { new CreateBankVM() }); // Start with one bank by default
+            return View(new List<CreateBankVM> { new CreateBankVM() }); 
         }
 
         [HttpPost]
@@ -93,6 +271,8 @@ namespace BankApplication.Controllers
 
             return View(banks);
         }
+
+
 
         public IActionResult Create()
         {
@@ -178,27 +358,20 @@ namespace BankApplication.Controllers
                     return NotFound();
                 }
 
-                string photoUrl = viewModel.ExistingLogo;
+                string photoUrl = bank.Logo;
 
                 if (viewModel.Logo != null)
                 {
-                    
-                    //Delete existing logo
-                    if (!string.IsNullOrEmpty(bank.Logo))
+                    string ExistingLogoPath = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                    if(!Directory.Exists(ExistingLogoPath))
                     {
-                        string ExistingLogoPath = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
-                        if(!Directory.Exists(ExistingLogoPath))
-                        {
-                            Directory.CreateDirectory(ExistingLogoPath);
-                        }
-                    
-
-                   
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
-                        string filePath = Path.Combine(ExistingLogoPath, uniqueFileName);
-                        await viewModel.Logo.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                        photoUrl = ($"/Myfile/images/{uniqueFileName}");
+                        Directory.CreateDirectory(ExistingLogoPath);
                     }
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
+                    string filePath = Path.Combine(ExistingLogoPath, uniqueFileName);
+                    await viewModel.Logo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                    photoUrl = ($"/Myfile/images/{uniqueFileName}");
+                    
                 }
                 
                 bank.BankName = viewModel.BankName;
@@ -245,11 +418,6 @@ namespace BankApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BankExists(int id)
-        {
-            return _context.Banks.Any(e => e.BankId == id);
-        }
-
 
         [HttpGet]
         public IActionResult GetFile(string fileName)
@@ -266,6 +434,8 @@ namespace BankApplication.Controllers
             return PhysicalFile(filePath, contentType);
         }
 
+
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBranches(int BankId, List<CreateBranchVM> Branches)
@@ -274,34 +444,34 @@ namespace BankApplication.Controllers
             {
                 foreach (var branchVM in Branches)
                 {
-                    string uniqueFileName = null;
+                    string photoUrl = null;
                     if (branchVM.BranchLogo != null)
                     {
-                        string uploadFolder = Path.Combine(_env.WebRootPath, "images");
+                        string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(),"MyFile", "images");
                         if (!Directory.Exists(uploadFolder))
                         {
                             Directory.CreateDirectory(uploadFolder);
                         }
-                        uniqueFileName = Guid.NewGuid().ToString() + "_" + branchVM.BranchLogo.FileName;
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + branchVM.BranchLogo.FileName;
                         string filePath = Path.Combine(uploadFolder, uniqueFileName);
                         await branchVM.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                        photoUrl = $"/MyFile/images/{uniqueFileName}";
                     }
 
                     var branch = new Branch
                     {
                         BranchName = branchVM.BranchName,
-                        BranchLogo = uniqueFileName,
+                        BranchLogo = photoUrl,
                         IsActive = branchVM.IsActive,
                         BankId = BankId
                     };
-
                     _context.Branches.Add(branch);
                 }
 
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Details", new { id = BankId });
+            return RedirectToAction("Update", new { id = BankId });
         }
 
     }

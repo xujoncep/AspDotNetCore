@@ -1,0 +1,98 @@
+﻿@model BankApplication.Models.ViewModels.CreateBankWithMultipleBranchVM
+
+@{
+    ViewData["Title"] = "Create Bank with Branches";
+}
+
+<h2 class="fw-bold text-center">Create Bank With Branch</h2>
+<br />
+
+<h3>Fill-up Bank Information</h3>
+<hr />
+
+<form asp-action="CreateBankWithMultipleBranch" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label asp-for="@Model.Bank.BankName">Bank Name</label>
+        <input asp-for="@Model.Bank.BankName" class="form-control" required />
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label asp-for="@Model.BankLogo">Bank Logo</label>
+        <input type="file" asp-for="@Model.BankLogo" class="form-control" />
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label asp-for="@Model.Bank.BankAddress">Address</label>
+        <input asp-for="@Model.Bank.BankAddress" class="form-control" />
+    </div>
+    <br />
+
+    <h3>Fill-up Branch Information</h3>
+    <table class="table table-bordered table-striped table-hover text-center">
+        <button type="button" id="add-branch" class="btn btn-secondary">Add Branch</button>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Logo</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="branches-container">
+            <tr>
+                <td>
+                    <input type="text" name="Branches[0].BranchName" class="form-control" />
+                </td>
+                <td>
+                    <input type="file" name="Branches[0].BranchLogo" class="form-control" />
+                </td>
+                <td>
+                    <select name="Branches[0].IsActive" class="form-control">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <br /><br />
+    <button type="submit" class="btn btn-success">Create</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#add-branch').click(function () {
+            const rowIndex = $('#branches-container tr').length;
+            const newRow = `
+                <tr>
+                    <td>
+                        <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
+                    </td>
+                    <td>
+                            <input type="file" name="Branches[${rowIndex}].BranchLogo" class="form-control" />
+                    </td>
+                    <td>
+                        <select name="Branches[${rowIndex}].IsActive" class="form-control">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#branches-container').append(newRow);
+        });
+
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+</script>

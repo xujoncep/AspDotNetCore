@@ -1,0 +1,66 @@
+﻿@model BankApplication.Models.ViewModels.EditBranchVM
+
+@{
+    ViewData["Title"] = "EditBranchWithBank";
+}
+
+<h1 class="text-center fw-bold">Edit Branch</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditBranchWithBank" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BranchId" />
+            <div class="form-group">
+                <label asp-for="BranchName" class="control-label"></label>
+                <input asp-for="BranchName" class="form-control" />
+                <span asp-validation-for="BranchName" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label class="control-label">Existing Branch Logo </label>
+                <div>
+                    @if (Model != null)
+                    {
+                        var fileName = System.IO.Path.GetFileName(Model.ExistingBranchLogo);
+                        <img src="@Url.Action("GetFile", "Bank", new { fileName })" style="width:50px; height:50px;" />
+                    }
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="BranchLogo" class="control-label"></label>
+                <input asp-for="BranchLogo" class="form-control" />
+                <span asp-validation-for="BranchLogo" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="BankId" class="control-label"></label>
+                <select asp-for="BankId" class="form-control" asp-items="ViewBag.BankId"></select>
+                <span asp-validation-for="BankId" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label>IsActive</label>
+                <div>
+                    <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+                    <input type="hidden" name="IsActive" value="false" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

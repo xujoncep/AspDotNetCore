@@ -6,7 +6,7 @@ namespace BankApplication.Models.Entity
     {
         [Key]
         public int BranchId { get; set; }
-        public string BranchName { get; set; }
+        public string? BranchName { get; set; }
         public string? BranchLogo { get; set; }
         public bool IsActive { get; set; }
 

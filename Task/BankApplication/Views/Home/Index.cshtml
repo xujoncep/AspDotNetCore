@@ -3,6 +3,35 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome To Bank Application</h1>
-    <p>Learn about</p>
+    <h1 class="display-4 fw-bold">Welcome To Bank Application</h1>
+</div>
+
+<div class="card">
+    <div class="card-header fw-bold">
+        Bank-Section
+    </div>
+    <div class="card-body">
+        <ul>
+            <li>Single Bank </li>
+            <li>Multiple Bank </li>
+            <li>Bank with single branch</li>
+            <li>Bank with multiple branch</li>
+        </ul>
+        
+        <a asp-action="Index" asp-controller="Bank" class="btn btn-primary">Index</a>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header fw-bold">
+        Branch-Section
+    </div>
+    <div class="card-body">
+        <ul>
+            <li>Single Branch </li>
+            <li>Multiple Branch </li>
+        </ul>
+        <a asp-action="Index" asp-controller="Branch" class="btn btn-primary">Index</a>
+    </div>
 </div>

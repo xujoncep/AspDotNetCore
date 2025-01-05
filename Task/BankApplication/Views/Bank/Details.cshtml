@@ -4,9 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h2 class="text-center fw-bold">Welcome to Bank Details Page</h2>
-<hr />
+<h2 class="text-center fw-bold">Welcome to @Model.BankName Bank Limited</h2>
 
+<h4>Bank Information Section</h4>
+<hr />
 <div class="text-center">
     <dl class="row">
         <dt class="col-sm-2">
@@ -34,62 +35,53 @@
     </dl>
 </div>
 
-<h3>Add Branches to Bank: @Model.BankName</h3>
+<h4>Branch Information Section</h4>
+<hr />
 
-<form asp-action="AddBranches" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="BankId" value="@Model.BankId" />
-    <table class="table">
-        <thead>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Branch Name</th>
+            <th>Branch Logo</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+        
+    <tbody id="branchTableBody">
+
+        @if (Model.Branches != null)
+        {
+
+            @foreach (var item in Model.Branches)
+            {
+                    <tr>
+                        <td>@item.BranchName</td>
+                        <td>
+                            @if (item.BranchLogo != null)
+                            {
+                                var fileName = System.IO.Path.GetFileName(item.BranchLogo);
+                                <img src="@Url.Action("GetFile", "Bank", new { fileName })" style="width:50px; height:50px;" />
+
+                            }
+                            
+                        </td>
+                        <td>@item.IsActive</td>
+                    </tr>
+            }
+
+        }
+
+        else
+        {
             <tr>
-                <th>Branch Name</th>
-                <th>Branch Logo</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <td colspan="4" class="text-danger text-center">No Branches Found!</td>
             </tr>
-        </thead>
-        <tbody id="branches-container">
-            <!-- New branches will be added here dynamically -->
-        </tbody>
-    </table>
+        }
 
-    <button type="button" id="add-branch" class="btn btn-secondary">Add New Branch</button>
-    <br /><br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    </tbody>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#add-branch').click(function () {
-            const rowIndex = $('#branches-container tr').length;
-            const newRow = `
-                <tr>
-                    <td>
-                        <input type="text" class="form-control" name="Branches[${rowIndex}].BranchName" required />
-                    </td>
-                    <td>
-                        <input type="file" class="form-control" name="Branches[${rowIndex}].BranchLogo" />
-                    </td>
-                    <td>
-                        <select class="form-control" name="Branches[${rowIndex}].IsActive">
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                    </td>
-                </tr>`;
-            $('#branches-container').append(newRow);
-        });
+</table>
 
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('tr').remove();
-        });
-    });
-</script>
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.BankId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div>   
+    <a class="btn btn-success" asp-action="Index">Back to Bank List</a>
 </div>

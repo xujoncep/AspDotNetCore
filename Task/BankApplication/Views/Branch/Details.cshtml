@@ -20,7 +20,11 @@
             @Html.DisplayNameFor(model => model.BranchLogo)
         </dt>
         <dd class = "col-sm-10">
-           <img src="/images/@Model.BranchLogo" style="width:100px; height:100px" />
+            @if (Model != null)
+            {
+                var fileName = System.IO.Path.GetFileName(Model.BranchLogo);
+                <img src="@Url.Action("GetFile", "Bank", new { fileName })" style="width:50px; height:50px;" />
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Bank)

@@ -21,13 +21,12 @@ namespace BankApplication.Controllers
         }
 
 
-        // GET: Bank/Create
+   
         public IActionResult Create()
         {
             return View(new Bank { Branches = new List<Branch> { new Branch() } });
         }
 
-        // POST: Bank/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Bank bank, List<IFormFile> branchLogos)
