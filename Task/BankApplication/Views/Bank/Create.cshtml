@@ -1,14 +1,13 @@
-﻿@model BankApplication.Models.ViewModels.CreateBankVM
+﻿@* @model BankApplication.Models.ViewModels.CreateBankVM
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="text-center">Create Bank</h1>
 
-<h4>Bank</h4>
 <hr />
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -17,24 +16,108 @@
                 <input asp-for="BankName" class="form-control" />
                 <span asp-validation-for="BankName" class="text-danger"></span>
             </div>
+            <br />
+
             <div class="form-group">
                 <label asp-for="Logo" class="control-label"></label>
                 <input asp-for="Logo" class="form-control" />
                 <span asp-validation-for="Logo" class="text-danger"></span>
             </div>
+            <br />
+
             <div class="form-group">
                 <label asp-for="BankAddress" class="control-label"></label>
                 <input asp-for="BankAddress" class="form-control" />
                 <span asp-validation-for="BankAddress" class="text-danger"></span>
             </div>
+            <br />
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-success float-end" asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div> 
+</div>
+ *@
+
+@model BankApplication.Models.ViewModels.CreateBankVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-center">Create Bank</h1>
+
+<hr />
+<div id="response-message">
+
+</div> 
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form id="createBankForm" enctype="multipart/form-data">
+            <div id="validationSummary" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BankName" class="control-label"></label>
+                <input asp-for="BankName" id="BankName" class="form-control" />
+                <span asp-validation-for="BankName" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="Logo" class="control-label"></label>
+                <input asp-for="Logo" id="Logo" class="form-control" type="file" />
+                <span asp-validation-for="Logo" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="BankAddress" class="control-label"></label>
+                <input asp-for="BankAddress" id="BankAddress" class="form-control" />
+                <span asp-validation-for="BankAddress" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <button type="button" id="submitForm" class="btn btn-primary">Create</button>
+                <a class="btn btn-success float-end" asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#submitForm').click(function (e) {
+            e.preventDefault();
 
+            var formData = new FormData();
+            formData.append('BankName', $("#BankName").val());
+            formData.append('Logo', $('#Logo')[0].files[0]);
+            formData.append('BankAddress', $("#BankAddress").val());
+
+            $.ajax({
+                url: '@Url.Action("Create", "Bank")',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index", "Bank")';
+                        }, 2000);
+                    } else {
+                        $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + xhr.responseText + '</div>');
+                }
+            });
+        });
+    });
+</script>

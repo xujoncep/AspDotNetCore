@@ -231,8 +231,9 @@ namespace BankApplication.Controllers
             return View(new List<CreateBankVM> { new CreateBankVM() }); 
         }
 
+        
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateMultiple(List<CreateBankVM> banks)
         {
             if (ModelState.IsValid)
@@ -266,10 +267,10 @@ namespace BankApplication.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Banks created successfully!" });
             }
 
-            return View(banks);
+            return Json(new { success = false, message = "Invalid data submitted." });
         }
 
 
@@ -279,43 +280,46 @@ namespace BankApplication.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( CreateBankVM viewModel)
+        public async Task<IActionResult> Create([FromForm] CreateBankVM viewModel)
         {
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                string logoUrl = null;
-                if (viewModel.Logo != null)
-                {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(),"MyFile","images");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    await viewModel.Logo.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                    logoUrl = ($"/Myfile/images/{uniqueFileName}");
-                }
-
-                Bank bank = new Bank
-                {
-                    BankName = viewModel.BankName,
-                    Logo = logoUrl,
-                    BankAddress = viewModel.BankAddress
-                };
-
-                _context.Add(bank);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = false, message = "Validation failed", errors = ModelState });
             }
-            return View(viewModel);
+
+            string logoUrl = null;
+
+            // Handle logo upload
+            if (viewModel.Logo != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                await viewModel.Logo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                logoUrl = $"/MyFile/images/{uniqueFileName}";
+            }
+
+            // Create and save bank entity
+            Bank bank = new Bank
+            {
+                BankName = viewModel.BankName,
+                Logo = logoUrl,
+                BankAddress = viewModel.BankAddress
+            };
+
+            _context.Add(bank);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Bank created successfully" });
         }
 
-        
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -341,52 +345,50 @@ namespace BankApplication.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditBankVM viewModel)
         {
-            if (id !=viewModel.BankId)
+            if (id != viewModel.BankId)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Bank not found." });
             }
 
-            if ( ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                //null check
                 var bank = await _context.Banks.FindAsync(id);
                 if (bank == null)
                 {
-                    return NotFound();
+                    return Json(new { success = false, message = "Bank not found." });
                 }
 
                 string photoUrl = bank.Logo;
 
                 if (viewModel.Logo != null)
                 {
-                    string ExistingLogoPath = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
-                    if(!Directory.Exists(ExistingLogoPath))
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                    if (!Directory.Exists(uploadsFolder))
                     {
-                        Directory.CreateDirectory(ExistingLogoPath);
+                        Directory.CreateDirectory(uploadsFolder);
                     }
+
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
-                    string filePath = Path.Combine(ExistingLogoPath, uniqueFileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                     await viewModel.Logo.CopyToAsync(new FileStream(filePath, FileMode.Create));
-                    photoUrl = ($"/Myfile/images/{uniqueFileName}");
-                    
+                    photoUrl = $"/MyFile/images/{uniqueFileName}";
                 }
-                
+
                 bank.BankName = viewModel.BankName;
                 bank.BankAddress = viewModel.BankAddress;
                 bank.Logo = photoUrl;
 
                 _context.Update(bank);
-                 await _context.SaveChangesAsync();               
-                 return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
 
+                return Json(new { success = true, message = "Bank details updated successfully!" });
             }
 
-
-            return View(viewModel);
+            return Json(new { success = false, message = "Invalid data submitted." });
         }
+
 
         public async Task<IActionResult> Delete(int? id)
         {
