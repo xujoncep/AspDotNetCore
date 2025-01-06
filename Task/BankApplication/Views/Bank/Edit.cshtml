@@ -136,6 +136,7 @@
                 data: formData,
                 processData: false,
                 contentType: false,
+                Cache: false,
                 success: function (response) {
                     if (response.success) {
                         $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');

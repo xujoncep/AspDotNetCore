@@ -1,4 +1,5 @@
-﻿@model BankApplication.Models.ViewModels.CreateBankWithBranchVM
+﻿
+@model BankApplication.Models.ViewModels.CreateBankWithBranchVM
 
 @{
     ViewData["Title"] = "Create Bank with Branches";
@@ -10,7 +11,7 @@
 <h3>Fill-up Bank Information</h3>
 <hr />
 
-<form asp-action="CreateBankWithBranch" enctype="multipart/form-data" method="post">
+<form id="bank-branch-form" enctype="multipart/form-data" method="post">
     <div class="form-group">
         <label asp-for="BankName">Bank Name</label>
         <input asp-for="BankName" class="form-control" />
@@ -33,87 +34,55 @@
     <hr />
 
     <div class="form-group">
-        <label asp-for="BranchName">Bank Name</label>
+        <label asp-for="BranchName">Branch Name</label>
         <input asp-for="BranchName" class="form-control" />
     </div>
     <br />
 
     <div class="form-group">
-        <label asp-for="BranchLogo">Bank Logo</label>
+        <label asp-for="BranchLogo">Branch Logo</label>
         <input asp-for="BranchLogo" type="file" class="form-control" />
     </div>
     <br />
 
-    <td>
+    <div class="form-group">
+        <label asp-for="IsActive">Status</label>
         <select asp-for="IsActive" class="form-control">
             <option value="true">Active</option>
             <option value="false">Inactive</option>
         </select>
-    </td>
+    </div>
     <br />
-   
-    <button type="submit" class="btn btn-success">Create</button>
+
+    <button type="button" id="submit-form" class="btn btn-success">Create</button>
+    <a class="btn btn-success float-end" asp-action="Index">Back to List</a>
 </form>
 
-
-@* <table class="table">
-        <button type="button" id="add-branch" class="btn btn-secondary">Add Branch</button>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Logo</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="branches-container">
-            <tr>
-                <td>
-                    <input type="text" name="Branches[0].BranchName" class="form-control" required />
-                </td>
-                <td>
-                    <input type="file" name="branchLogos" class="form-control" />
-                </td>
-                <td>
-                    <select name="Branches[0].IsActive" class="form-control">
-                        <option value="true">Active</option>
-                        <option value="false">Inactive</option>
-                    </select>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger remove-row">Remove</button>
-                </td>
-            </tr>
-        </tbody>
-    </table> *@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#add-branch').click(function () {
-            const rowIndex = $('#branches-container tr').length;
-            const newRow = `
-                <tr>
-                    <td>
-                        <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
-                    </td>
-                    <td>
-                        <input type="file" name="branchLogos" class="form-control" />
-                    </td>
-                    <td>
-                        <select name="Branches[${rowIndex}].IsActive" class="form-control">
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                    </td>
-                </tr>`;
-            $('#branches-container').append(newRow);
-        });
+        $('#submit-form').click(function () {
+                 const formData = new FormData($('#bank-branch-form')[0]);
 
-        $(document).on('click', '.remove-row', function () {
-            $(this).closest('tr').remove();
+                   $.ajax({
+                    url: '@Url.Action("CreateBankWithBranch", "Bank")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = '@Url.Action("Index", "Bank")';
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('An error occurred: ' + error);
+                    }
+            });
         });
-    });
+        });
 </script>
+

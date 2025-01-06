@@ -11,7 +11,7 @@ namespace BankApplication.Models.Entity
         public string? BankAddress { get; set; }
 
 
-        public List<Branch>? Branches { get; set; }
+        public virtual List<Branch>? Branches { get; set; }
 
     }
 }

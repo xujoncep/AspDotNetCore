@@ -27,7 +27,7 @@ namespace BankApplication.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var branches = await _context.Branches.Include(b => b.Bank).ToListAsync();
+            var branches = await _context.Branches.ToListAsync();
             return View(branches);
         }
 
@@ -72,7 +72,11 @@ namespace BankApplication.Controllers
                     }
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
                     string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                    await viewModel.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.BranchLogo.CopyToAsync(fileStream);
+                    }
+
                     photoUrl = $"/MyFile/images/{uniqueFileName}";
                 }
                  
@@ -86,7 +90,6 @@ namespace BankApplication.Controllers
                 _context.Add(branch);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
             }
             ViewData["BankId"] = new SelectList(_context.Banks, "BankId", "BankName");
             return View(viewModel);
@@ -119,7 +122,13 @@ namespace BankApplication.Controllers
 
                         string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
                         string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                        await viewModel.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
+
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await viewModel.BranchLogo.CopyToAsync(fileStream);
+                        }
+
                         photoUrl = $"/MyFile/images/{uniqueFileName}";
                     }
 
@@ -143,7 +152,7 @@ namespace BankApplication.Controllers
         }
 
 
-        //EditBranchWithBank
+        //Edit Branch From Bank
 
         [HttpGet]
         public async Task<IActionResult> EditBranchWithBank(int? id)
@@ -187,7 +196,7 @@ namespace BankApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                //check bank null
+      
                 var branch = await _context.Branches.FindAsync(id);
 
                 if (branch == null)
@@ -201,26 +210,28 @@ namespace BankApplication.Controllers
 
                 if (viewModel.BranchLogo != null)
                 {
-                    //delete existing logo
+                    
+                    
+
+                    
+                    string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
+                    string uniqueFilenName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
+                    string filePath = Path.Combine(uploadFolder, uniqueFilenName);
+                    
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.BranchLogo.CopyToAsync(fileStream);
+                    }
+
                     if (string.IsNullOrEmpty(branch.BranchLogo) == false)
                     {
-
                         string exsitingFilePath = Path.Combine(Directory.GetCurrentDirectory(), "images", branch.BranchLogo);
 
                         if (System.IO.File.Exists(exsitingFilePath))
                         {
                             System.IO.File.Delete(exsitingFilePath);
                         }
-
-
                     }
-
-                    //upload new logo
-                    string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
-                    string uniqueFilenName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
-                    string filePath = Path.Combine(uploadFolder, uniqueFilenName);
-                    await viewModel.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
-
                     branch.BranchLogo = uniqueFilenName;
 
                 }
@@ -275,7 +286,6 @@ namespace BankApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                //check bank null
                 var branch = await _context.Branches.FindAsync(id);
 
                 if(branch == null)
@@ -289,25 +299,26 @@ namespace BankApplication.Controllers
 
                 if (viewModel.BranchLogo != null)
                 {
-                    //delete existing logo
+
+                    string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(),"MyFile", "images");
+                    string uniqueFilenName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
+                    string filePath = Path.Combine(uploadFolder, uniqueFilenName);
+                    
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.BranchLogo.CopyToAsync(fileStream);
+                    }
+
                     if (string.IsNullOrEmpty(branch.BranchLogo) == false)
                     {
+                        string exsitingFilePath = Path.Combine(Directory.GetCurrentDirectory(), "images", branch.BranchLogo.TrimStart('/'));
 
-                        string exsitingFilePath = Path.Combine(Directory.GetCurrentDirectory(), "images", branch.BranchLogo);
-
-                        if(System.IO.File.Exists(exsitingFilePath))
+                        if (System.IO.File.Exists(exsitingFilePath))
                         {
                             System.IO.File.Delete(exsitingFilePath);
                         }
 
-
                     }
-
-                    //upload new logo
-                    string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(),"MyFile", "images");
-                    string uniqueFilenName = Guid.NewGuid().ToString() + "_" + viewModel.BranchLogo.FileName;
-                    string filePath = Path.Combine(uploadFolder, uniqueFilenName);
-                    await viewModel.BranchLogo.CopyToAsync(new FileStream(filePath, FileMode.Create));
 
                     branch.BranchLogo = uniqueFilenName;
 
@@ -362,7 +373,7 @@ namespace BankApplication.Controllers
         }
 
 
-        //DeleteBranchWithBank
+        //Delete branch from bank
 
 
         [HttpGet]

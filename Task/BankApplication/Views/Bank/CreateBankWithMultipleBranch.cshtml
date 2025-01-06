@@ -4,34 +4,38 @@
     ViewData["Title"] = "Create Bank with Branches";
 }
 
+<div id="response-message">
+
+</div>
+
 <h2 class="fw-bold text-center">Create Bank With Branch</h2>
 <br />
 
 <h3>Fill-up Bank Information</h3>
 <hr />
 
-<form asp-action="CreateBankWithMultipleBranch" enctype="multipart/form-data" method="post">
+<form id="bank-branch-form" enctype="multipart/form-data" method="post">
     <div class="form-group">
         <label asp-for="@Model.Bank.BankName">Bank Name</label>
-        <input asp-for="@Model.Bank.BankName" class="form-control" required />
+        <input id="BankName" asp-for="@Model.Bank.BankName" class="form-control" required />
     </div>
     <br />
 
     <div class="form-group">
         <label asp-for="@Model.BankLogo">Bank Logo</label>
-        <input type="file" asp-for="@Model.BankLogo" class="form-control" />
+        <input id="Logo" type="file" asp-for="@Model.BankLogo" class="form-control" />
     </div>
     <br />
 
     <div class="form-group">
         <label asp-for="@Model.Bank.BankAddress">Address</label>
-        <input asp-for="@Model.Bank.BankAddress" class="form-control" />
+        <input id="BankAddress" asp-for="@Model.Bank.BankAddress" class="form-control" />
     </div>
     <br />
 
     <h3>Fill-up Branch Information</h3>
     <table class="table table-bordered table-striped table-hover text-center">
-        <button type="button" id="add-branch" class="btn btn-secondary">Add Branch</button>
+        <button type="button" id="add-branch" class="btn btn-secondary mb-2">Add Branch</button>
         <thead>
             <tr>
                 <th>Name</th>
@@ -43,7 +47,7 @@
         <tbody id="branches-container">
             <tr>
                 <td>
-                    <input type="text" name="Branches[0].BranchName" class="form-control" />
+                    <input type="text" name="Branches[0].BranchName" class="form-control" required />
                 </td>
                 <td>
                     <input type="file" name="Branches[0].BranchLogo" class="form-control" />
@@ -60,9 +64,10 @@
             </tr>
         </tbody>
     </table>
-    
+
     <br /><br />
-    <button type="submit" class="btn btn-success">Create</button>
+    <button type="button" id="submitForm" class="btn btn-success">Create</button>
+    <a class="btn btn-success float-end" asp-action="Index">Back to List</a>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -71,28 +76,55 @@
         $('#add-branch').click(function () {
             const rowIndex = $('#branches-container tr').length;
             const newRow = `
-                <tr>
-                    <td>
-                        <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
-                    </td>
-                    <td>
+                    <tr>
+                        <td>
+                            <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
+                        </td>
+                        <td>
                             <input type="file" name="Branches[${rowIndex}].BranchLogo" class="form-control" />
-                    </td>
-                    <td>
-                        <select name="Branches[${rowIndex}].IsActive" class="form-control">
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                    </td>
-                </tr>`;
+                        </td>
+                        <td>
+                            <select name="Branches[${rowIndex}].IsActive" class="form-control">
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger remove-row">Remove</button>
+                        </td>
+                    </tr>`;
             $('#branches-container').append(newRow);
         });
 
         $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();
         });
-    });
+
+        $('#submitForm').click(function (e) {
+            e.preventDefault();
+
+            const formData = new FormData($('#bank-branch-form')[0]);
+
+            $.ajax({
+                url: '@Url.Action("CreateBankWithMultipleBranch", "Bank")',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index", "Bank")';
+                        }, 2000);
+                    } else {
+                        $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + xhr.responseText + '</div>');
+                }
+            });
+        });
+        });
 </script>

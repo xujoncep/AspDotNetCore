@@ -12,6 +12,6 @@ namespace BankApplication.Models.Entity
 
 
         public int BankId { get; set; }
-        public Bank? Bank { get; set; }
+        public virtual Bank? Bank { get; set; }
     }
 }

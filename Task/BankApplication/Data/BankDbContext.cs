@@ -13,6 +13,11 @@ namespace BankApplication.Data
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Branch> Branches { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.Entity<Bank>()

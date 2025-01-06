@@ -1,0 +1,291 @@
+﻿@* 
+@model BankApplication.Models.ViewModels.EditBankWithMultipleBranchVM
+
+@{
+    ViewData["Title"] = "Edit Bank with Branches";
+}
+
+<h2 class="fw-bold text-center">Edit Bank With Branch</h2>
+<br />
+
+<h3>Update Bank Information</h3>
+<hr />
+
+<form asp-action="EditBankWithMultipleBranch" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="Bank.BankId" value="@Model.Bank.BankId" />
+    
+    <div class="form-group">
+        <label asp-for="@Model.Bank.BankName">Bank Name</label>
+        <input asp-for="@Model.Bank.BankName" class="form-control" required />
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label class="control-label">ExistingLogo </label>
+        @if (Model.ExistingLogo != null)
+        {
+            var fileName = System.IO.Path.GetFileName(Model.ExistingLogo);
+            <img src="@Url.Action("GetFile", "Bank", new { fileName })" style="width:50px; height:50px;" />
+
+        }
+
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label class="control-label"> Upload New Logo</label>
+        <input type="file" asp-for="@Model.BankLogo" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Bank.BankAddress">Address</label>
+        <input asp-for="@Model.Bank.BankAddress" class="form-control" />
+    </div>
+    <br />
+
+    <h3 class="fw-bold text-center">Update Branch Information</h3>
+    <table class="table table-bordered table-striped table-hover text-center">
+        <button type="button" id="add-branch" class="btn btn-secondary mb-2">Add Branch</button>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Existing-Logo</th>
+                <th>Upload-Logo</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="branches-container">
+            @if (Model.Branches != null && Model.Branches.Any())
+            {
+                for (int i = 0; i < Model.Branches.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" name="Branches[@i].BranchId" value="@Model.Branches[i].BranchId" />
+                            <input type="text" name="Branches[@i].BranchName" class="form-control" value="@Model.Branches[i].BranchName" required />
+                        </td>
+
+                        <td>
+                            @if(Model.Branches[i].ExistingBranchLogo != null)
+                            {
+                                var fileName = System.IO.Path.GetFileName(Model.Branches[i].ExistingBranchLogo);
+                                <img src="@Url.Action("GetFile","Bank", new {fileName})" style="width:50px; height:50px" />
+                            }
+
+                        </td>
+
+                        <td>
+                            <input type="file" name="Branches[@i].BranchLogo" class="form-control" />
+                        </td>
+
+                        <td>
+                            <input asp-for="Branches[@i].IsActive" type="checkbox" class="form-check-input" />
+                            <input type="hidden" name="Branches[@i].IsActive" value="false" />
+
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-danger remove-row">Remove</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a class="btn btn-success float-end" asp-action="Index">Back to Bank List</a>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#add-branch').click(function () {
+            const rowIndex = $('#branches-container tr').length;
+            const newRow = `
+                <tr>
+                    <td>
+                        <input type="hidden" name="Branches[${rowIndex}].BranchId" value="" />
+                        <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
+                    </td>
+                    <td>
+                        <input type="file" name="Branches[${rowIndex}].BranchLogo" class="form-control" />
+                    </td>
+                    <td>
+                        <select name="Branches[${rowIndex}].IsActive" class="form-control">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#branches-container').append(newRow);
+        });
+
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+</script>
+ *@
+
+@model BankApplication.Models.ViewModels.EditBankWithMultipleBranchVM
+
+<h2 class="fw-bold text-center">Edit Bank With Branch</h2>
+<br />
+
+<div id="response-message"></div>
+
+<h3>Update Bank Information</h3>
+<hr />
+
+<form id="edit-bank-form" enctype="multipart/form-data">
+    <input type="hidden" name="Bank.BankId" value="@Model.Bank.BankId" />
+
+    <div class="form-group">
+        <label asp-for="@Model.Bank.BankName">Bank Name</label>
+        <input id="BankName" asp-for="@Model.Bank.BankName" class="form-control" required />
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label class="control-label">Existing Logo</label>
+        @if (Model.ExistingLogo != null)
+        {
+            var fileName = System.IO.Path.GetFileName(Model.ExistingLogo);
+            <img src="@Url.Action("GetFile", "Bank", new { fileName })" style="width:50px; height:50px;" />
+
+        }
+    </div>
+    <br />
+
+    <div class="form-group">
+        <label class="control-label">Upload New Logo</label>
+        <input id="BankLogo" type="file" name="BankLogo" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Bank.BankAddress">Address</label>
+        <input id="BankAddress" asp-for="@Model.Bank.BankAddress" class="form-control" />
+    </div>
+    <br />
+
+    <h3 class="fw-bold text-center">Update Branch Information</h3>
+    <table class="table table-bordered table-striped table-hover text-center">
+        <button type="button" id="add-branch" class="btn btn-secondary mb-2">Add Branch</button>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Existing-Logo</th>
+                <th>Upload-Logo</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="branches-container">
+            @if (Model.Branches != null && Model.Branches.Any())
+            {
+                for (int i = 0; i < Model.Branches.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" name="Branches[@i].BranchId" value="@Model.Branches[i].BranchId" />
+                            <input type="text" name="Branches[@i].BranchName" class="form-control" value="@Model.Branches[i].BranchName" required />
+                        </td>
+
+                        <td>
+                            @if(Model.Branches[i].ExistingBranchLogo != null)
+                            {
+                                var fileName = System.IO.Path.GetFileName(Model.Branches[i].ExistingBranchLogo);
+                                <img src="@Url.Action("GetFile","Bank", new {fileName})" style="width:50px; height:50px" />
+                            }
+                        </td>
+
+                        <td>
+                            <input type="file" name="Branches[@i].BranchLogo" class="form-control" />
+                        </td>
+
+                        <td>
+                            <input asp-for="Branches[@i].IsActive" type="checkbox" class="form-check-input" />
+                            <input type="hidden" name="Branches[@i].IsActive" value="false" />
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn btn-danger remove-row">Remove</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <br /><br />
+    <button type="button" id="submitForm" class="btn btn-primary">Update</button>
+    <a class="btn btn-success float-end" asp-action="Index">Back to Bank List</a>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#submitForm').click(function (e) {
+            e.preventDefault();
+
+        var formData = new FormData($('#edit-bank-form')[0]);
+
+        $.ajax({
+                url: '@Url.Action("EditBankWithMultipleBranchAjax", "Bank")',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $('#response-message').html('<div class="alert alert-success">' + response.message + '</div>');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index", "Bank")';
+                        }, 2000);
+                    } else {
+                        $('#response-message').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr) {
+                    $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + xhr.responseText + '</div>');
+                }
+        });
+    });
+
+    $('#add-branch').click(function () {
+        const rowIndex = $('#branches-container tr').length;
+        const newRow = `
+            <tr>
+                    <td>
+                        <input type="hidden" name="Branches[${rowIndex}].BranchId" value="" />
+                        <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
+                    </td>
+                    <td></td>
+                    <td>
+                        <input type="file" name="Branches[${rowIndex}].BranchLogo" class="form-control" />
+                    </td>
+                    <td>
+                        <select name="Branches[${rowIndex}].IsActive" class="form-control">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#branches-container').append(newRow);
+        });
+
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+        });
+    });
+</script>
