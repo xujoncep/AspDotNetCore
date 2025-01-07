@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BankApplication.Data;
 using BankApplication.Models.Entity;
 using BankApplication.Models.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BankApplication.Controllers
 {
@@ -62,152 +63,24 @@ namespace BankApplication.Controllers
             return View(viewModel);
         }
 
-
-        //[HttpPost]
-        //public async Task<IActionResult> EditBankWithMultipleBranch(int id, EditBankWithMultipleBranchVM viewModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var bank = _context.Banks.FirstOrDefault(b => b.BankId == id);
-
-        //        if (bank == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-
-        //        bank.BankName = viewModel.Bank.BankName;
-        //        bank.BankAddress = viewModel.Bank.BankAddress;
-
-        //        if (viewModel.BankLogo != null)
-        //        {
-        //            string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
-
-        //            if (Directory.Exists(folder) == false)
-        //            {
-        //                Directory.CreateDirectory(folder);
-        //            }
-
-        //            string fileName = Guid.NewGuid().ToString() + "_" + viewModel.BankLogo.FileName;
-        //            string filePath = Path.Combine(folder, fileName);
-
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                await viewModel.BankLogo.CopyToAsync(stream);
-        //            }
-
-        //            if (string.IsNullOrEmpty(bank.Logo) == false)
-        //            {
-        //                string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), bank.Logo.TrimStart('/'));
-        //                if (System.IO.File.Exists(oldFilePath))
-        //                {
-        //                    System.IO.File.Delete(oldFilePath);
-        //                }
-        //            }
-        //            bank.Logo = $"/MyFile/images/{fileName}";
-        //        }
-
-        //        // Branch section
-        //        foreach (var branchVM in viewModel.Branches)
-        //        {
-        //            var existingBranch = bank.Branches.FirstOrDefault(b => b.BranchId == branchVM.BranchId);
-
-        //            if (existingBranch != null)
-        //            {
-
-        //                existingBranch.BranchName = branchVM.BranchName;
-        //                existingBranch.IsActive = branchVM.IsActive;
-
-        //                if (branchVM.BranchLogo != null)
-        //                {
-        //                    string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
-
-        //                    if (Directory.Exists(folder) == false)
-        //                    {
-        //                        Directory.CreateDirectory(folder);
-        //                    }
-
-        //                    string fileName = Guid.NewGuid().ToString() + "_" + branchVM.BranchLogo.FileName;
-        //                    string filePath = Path.Combine(folder, fileName);
-
-        //                    using (var stream = new FileStream(filePath, FileMode.Create))
-        //                    {
-        //                        await branchVM.BranchLogo.CopyToAsync(stream);
-        //                    }
-
-        //                    if (string.IsNullOrEmpty(existingBranch.BranchLogo) == false)
-        //                    {
-        //                        string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), existingBranch.BranchLogo.TrimStart('/'));
-        //                        if (System.IO.File.Exists(oldFilePath))
-        //                        {
-        //                            System.IO.File.Delete(oldFilePath);
-        //                        }
-        //                    }
-
-        //                    existingBranch.BranchLogo = $"/MyFile/images/{fileName}";
-        //                }
-        //            }
-
-        //            else
-        //            {
-
-        //                string branchLogo = existingBranch.BranchLogo;
-        //                if (branchVM.BranchLogo != null)
-        //                {
-        //                    string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
-
-        //                    if (Directory.Exists(folder) == false)
-        //                    {
-        //                        Directory.CreateDirectory(folder);
-        //                    }
-
-        //                    string fileName = Guid.NewGuid().ToString() + "_" + branchVM.BranchLogo.FileName;
-        //                    string filePath = Path.Combine(folder, fileName);
-
-        //                    using (var stream = new FileStream(filePath, FileMode.Create))
-        //                    {
-        //                        await branchVM.BranchLogo.CopyToAsync(stream);
-        //                    }
-
-        //                    if (string.IsNullOrEmpty(branchLogo) == false)
-        //                    {
-        //                        string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), branchLogo.TrimStart('/'));
-        //                        if (System.IO.File.Exists(oldFilePath))
-        //                        {
-        //                            System.IO.File.Delete(oldFilePath);
-        //                        }
-        //                    }
-
-        //                    branchLogo = $"/MyFile/images/{fileName}";
-        //                }
-
-        //                var newBranch = new Branch
-        //                {
-        //                    BranchName = branchVM.BranchName,
-        //                    IsActive = branchVM.IsActive,
-        //                    BranchLogo = branchLogo
-        //                };
-
-        //                bank.Branches.Add(newBranch);
-        //            }
-        //        }
-
-        //        _context.Banks.Update(bank);
-        //        await _context.SaveChangesAsync();
-
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    return View(viewModel);
-        //}
-
         [HttpPost]
         public async Task<IActionResult> EditBankWithMultipleBranchAjax(int id, EditBankWithMultipleBranchVM viewModel)
         {
             bool isSuccess = false;
             string message = "Invalid data submitted!";
 
-            if (ModelState.IsValid == true)
+            if(ModelState.IsValid == false)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                var errorMsg = "";
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error);
+                    errorMsg += error + "\n";
+                }
+            }
+
+            else
             {
                 var bank = _context.Banks.FirstOrDefault(b => b.BankId == id);
 
@@ -247,6 +120,26 @@ namespace BankApplication.Controllers
                     bank.Logo = $"/MyFile/images/{fileName}";
                 }
 
+                // Handle branch deletions
+                if (string.IsNullOrEmpty(viewModel.DeletedBranchIds) == false)
+                {
+                    var branchIdsToDelete = viewModel.DeletedBranchIds.Split(',').Select(int.Parse).ToList();
+                    foreach (var branchId in branchIdsToDelete)
+                    {
+                        var branchToDelete = bank.Branches.FirstOrDefault(b => b.BranchId == branchId);
+                        if (branchToDelete != null)
+                        {
+                            _context.Branches.Remove(branchToDelete);
+                        }
+                    }
+
+                    viewModel.Branches = viewModel.Branches
+                        .Where(b => b.BranchId != null && b.BranchId.HasValue && !branchIdsToDelete.Contains(b.BranchId.Value))
+                        .ToList();
+
+                }
+
+
                 foreach (var branchVM in viewModel.Branches)
                 {
                     var existingBranch = bank.Branches.FirstOrDefault(b => b.BranchId == branchVM.BranchId);
@@ -285,6 +178,7 @@ namespace BankApplication.Controllers
                             existingBranch.BranchLogo = $"/MyFile/images/{fileName}";
                         }
                     }
+                    
                     else
                     {
                         string branchLogo = null;

@@ -4,8 +4,8 @@ namespace BankApplication.Models.ViewModels
 {
     public class EditBranchVM
     {
-        public int BranchId { get; set; }
-        public string BranchName { get; set; }
+        public int? BranchId { get; set; }
+        public string? BranchName { get; set; }
         public string? ExistingBranchLogo { get; set; }
         public IFormFile? BranchLogo { get; set; }
         public bool IsActive { get; set; }

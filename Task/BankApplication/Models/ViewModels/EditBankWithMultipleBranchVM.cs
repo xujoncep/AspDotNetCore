@@ -8,5 +8,6 @@ namespace BankApplication.Models.ViewModels
         public string? ExistingLogo { get; set; }
         public IFormFile? BankLogo { get; set; }
         public List<EditBranchVM>? Branches { get; set; }
+        public string? DeletedBranchIds { get; set; }
     }
 }
