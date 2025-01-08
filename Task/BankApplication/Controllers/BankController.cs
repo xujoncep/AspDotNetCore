@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BankApplication.Data;
+﻿using BankApplication.Data;
 using BankApplication.Models.Entity;
 using BankApplication.Models.ViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankApplication.Controllers
 {
@@ -23,7 +17,7 @@ namespace BankApplication.Controllers
             _context = context;
         }
 
-        
+
         public async Task<IActionResult> Index()
         {
             var banks = await _context.Banks.ToListAsync();
@@ -54,10 +48,10 @@ namespace BankApplication.Controllers
                 {
                     BranchId = branch.BranchId,
                     BranchName = branch.BranchName,
-                    IsActive =   branch.IsActive,
+                    IsActive = branch.IsActive,
                     ExistingBranchLogo = branch.BranchLogo
                 }).ToList()
-                
+
             };
 
             return View(viewModel);
@@ -69,7 +63,7 @@ namespace BankApplication.Controllers
             bool isSuccess = false;
             string message = "Invalid data submitted!";
 
-            if(ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                 var errorMsg = "";
@@ -133,9 +127,14 @@ namespace BankApplication.Controllers
                         }
                     }
 
+                    //viewModel.Branches = viewModel.Branches
+                    //    .Where(b => b.BranchId != null && b.BranchId.HasValue && !branchIdsToDelete.Contains(b.BranchId.Value))
+                    //    .ToList();
+
                     viewModel.Branches = viewModel.Branches
-                        .Where(b => b.BranchId != null && b.BranchId.HasValue && !branchIdsToDelete.Contains(b.BranchId.Value))
+                        .Where(b => b.BranchId == null || !viewModel.DeletedBranchIds.Split(',').Select(int.Parse).Contains(b.BranchId.Value))
                         .ToList();
+
 
                 }
 
@@ -178,7 +177,7 @@ namespace BankApplication.Controllers
                             existingBranch.BranchLogo = $"/MyFile/images/{fileName}";
                         }
                     }
-                    
+
                     else
                     {
                         string branchLogo = null;
@@ -221,7 +220,7 @@ namespace BankApplication.Controllers
 
             }
 
-            return Json(new { success =$"{isSuccess}", message =$"{message}" });
+            return Json(new { success = $"{isSuccess}", message = $"{message}" });
         }
 
 
@@ -240,8 +239,13 @@ namespace BankApplication.Controllers
 
             if (ModelState.IsValid == false)
             {
-                isSuccess = false;
-                message = "Invalid data submitted!";
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                var errorMsg = "";
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error);
+                    errorMsg += error + "\n";
+                }
             }
             else
             {
@@ -312,7 +316,7 @@ namespace BankApplication.Controllers
 
             }
 
-            return Json(new { success =$"{isSuccess}", message =$"{message}" });
+            return Json(new { success = $"{isSuccess}", message = $"{message}" });
         }
 
 
@@ -401,9 +405,9 @@ namespace BankApplication.Controllers
                 isSuccess = true;
                 message = "Bank and branch created successfully!";
 
-            } 
+            }
 
-            return Json(new { success =$"{isSuccess}", message =$"{message}" });
+            return Json(new { success = $"{isSuccess}", message = $"{message}" });
         }
 
 
@@ -442,10 +446,10 @@ namespace BankApplication.Controllers
 
         public IActionResult CreateMultiple()
         {
-            return View(new List<CreateBankVM> { new CreateBankVM() }); 
+            return View(new List<CreateBankVM> { new CreateBankVM() });
         }
 
-        
+
 
         [HttpPost]
         public async Task<IActionResult> CreateMultiple(List<CreateBankVM> banks)
@@ -468,7 +472,7 @@ namespace BankApplication.Controllers
                         }
 
                         string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName); 
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await viewModel.Logo.CopyToAsync(stream);
@@ -511,8 +515,8 @@ namespace BankApplication.Controllers
 
             if (ModelState.IsValid == false)
             {
-               isSuccess = false;
-               message = "Invalid data submitted!";
+                isSuccess = false;
+                message = "Invalid data submitted!";
             }
 
             else
@@ -549,8 +553,8 @@ namespace BankApplication.Controllers
                 message = "Bank created successfully!";
 
             }
-           
-            return Json(new { success =$"{isSuccess}", message = $"{message}" });
+
+            return Json(new { success = $"{isSuccess}", message = $"{message}" });
         }
 
 
@@ -611,12 +615,12 @@ namespace BankApplication.Controllers
 
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.Logo.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using ( var stream = new FileStream(filePath , FileMode.Create))
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await viewModel.Logo.CopyToAsync(stream);
                     }
 
-                   
+
                     if (string.IsNullOrEmpty(bank.Logo) == false)
                     {
                         string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), bank.Logo.TrimStart('/'));
@@ -638,7 +642,7 @@ namespace BankApplication.Controllers
                 message = "Bank details updated successfully!";
             }
 
-            return Json(new { success =$"{isSuccess}", message = $"{message}" });
+            return Json(new { success = $"{isSuccess}", message = $"{message}" });
         }
 
 
@@ -689,7 +693,7 @@ namespace BankApplication.Controllers
         }
 
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddBranches(int BankId, List<CreateBranchVM> Branches)
@@ -701,7 +705,7 @@ namespace BankApplication.Controllers
                     string photoUrl = null;
                     if (branchVM.BranchLogo != null)
                     {
-                        string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(),"MyFile", "images");
+                        string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
                         if (Directory.Exists(uploadFolder) == false)
                         {
                             Directory.CreateDirectory(uploadFolder);
@@ -710,7 +714,7 @@ namespace BankApplication.Controllers
                         //string uniqueFileName = Guid.NewGuid().ToString() + "_" + branchVM.BranchLogo.FileName;
                         string uniqueFileName = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff") + "_" + branchVM.BranchLogo.FileName;
                         string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                        
+
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await branchVM.BranchLogo.CopyToAsync(stream);

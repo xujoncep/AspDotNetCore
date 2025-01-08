@@ -73,7 +73,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+<script type="text/javascript">
     $('#add-branch').click(function () {
         const rowIndex = $('#branches-container tr').length;
         const newRow = `
@@ -105,16 +105,36 @@
     $('#submitForm').click(function (e) {
         e.preventDefault();
 
-        const form = document.getElementById('bank-branch-form');
-        const formData = new FormData(form);
 
-          for( var pair of formData.entries())
+            var formData = new FormData($('#bank-branch-form')[0]);
+
+            // var formData = new FormData();
+
+            // formData.append('Bank.BankName', $('#BankName').val());
+            // formData.append('Bank.BankAddress', $('#BankAddress').val());
+            // formData.append('BankLogo', $('#Logo')[0].files[0]);
+
+        
+            // $('#branches-container tr').each(function (index) {
+            //     var branchName = $(this).find('input[name$="BranchName"]').val();
+            //     var branchLogo = $(this).find('input[name$="BranchLogo"]')[0].files[0];
+            //     var branchStatus = $(this).find('select[name$="IsActive"]').val();
+
+            //     formData.append(`Branches[${index}].BranchName`, branchName);
+            //     formData.append(`Branches[${index}].BranchLogo`, branchLogo);
+            //     formData.append(`Branches[${index}].IsActive`, branchStatus);
+            // });
+            
+            
+           
+
+           for( var pair of formData.entries())
            {
                     console.log(pair[0]+ ', '+ pair[1]);
            }
 
            console.log(typeof(formData));
-
+           debugger;
 
             fetch('@Url.Action("CreateBankWithMultipleBranch", "BankV2")',
             {
@@ -127,7 +147,7 @@
                 {
                     $('#response-message').html('<div class="alert alert-success">' + data.message + '</div>');
                     setTimeout(() => {
-                        window.location.href = '@Url.Action("Index", "Bank")';
+                        window.location.href = '@Url.Action("Index", "BankV2")';
                     }, 2000);
                 } 
                 else 
@@ -139,7 +159,7 @@
                 $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + error.message + '</div>');
         });
        
-});
+    });
 
 
 

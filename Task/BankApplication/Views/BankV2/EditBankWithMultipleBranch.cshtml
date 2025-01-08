@@ -77,8 +77,12 @@
                         </td>
 
                         <td>
-                            <input asp-for="Branches[@i].IsActive" type="checkbox" class="form-check-input" />
-                        </td>
+                            <select name="Branches[@i].IsActive" class="form-control">
+                                <option value="true" selected="@(Model.Branches[i].IsActive ? "selected" : null)">Active</option>
+                                <option value="false" selected="@(Model.Branches[i].IsActive ? null : "selected")">Inactive</option>
+
+                            </select>
+                       </td>
 
                         <td>
                             <button type="button" class="btn btn-danger remove-row" data-branch-id="@Model.Branches[i].BranchId">Remove</button>
@@ -96,19 +100,48 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
+
+<!-- formData append method  to add data into form object-->
+
+@* <script type="text/javascript">
     const deletedBranchIds = [];
 
     $('#submitForm').click(function (e) {
         e.preventDefault();
 
-        const form = document.getElementById('edit-bank-form');
-        const formData = new FormData(form);
         var id = $('input[name="Bank.BankId"]').val();
+        var formData = new FormData();
+            formData.append('Bank.BankId', $('input[name="Bank.BankId"]').val());
+            formData.append('Bank.BankName', $('#BankName').val());
+            formData.append('Bank.BankAddress', $('#BankAddress').val());
+            formData.append('DeletedBranchIds', $('#DeletedBranchIds').val());
+            if ($('#BankLogo')[0].files[0]) {
+                formData.append('Bank.BankLogo', $('#BankLogo')[0].files[0]);
+            }
 
+            $('#branches-container tr').each(function (index) {
+
+                var branchId = $(this).find('input[name$="BranchId"]').val();
+                var branchName = $(this).find('input[name$="BranchName"]').val();
+                var branchLogo = $(this).find('input[name$="BranchLogo"]')[0].files[0];
+                var branchStatus = $(this).find('select[name$="IsActive"]').val();
+
+
+                formData.append(`Branches[${index}].BranchName`, branchName);
+                if (branchLogo) {
+                    formData.append(`Branches[${index}].BranchLogo`, branchLogo);
+                }
+                formData.append(`Branches[${index}].IsActive`, branchStatus);
+                formData.append(`Branches[${index}].BranchId`, branchId);
+                   
+            });
+
+        
         for (var pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
+
+       debugger;
 
 
         fetch(`/BankV2/EditBankWithMultipleBranch/${id}`,
@@ -171,4 +204,100 @@
         $(this).closest('tr').remove();
     });
   
+</script>
+ *@
+
+
+<!-- using formdata obejct -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        const deletedBranchIds = [];
+
+
+        $('#submitForm').click(function (e) {
+            e.preventDefault();
+
+            const id = $('input[name="Bank.BankId"]').val();
+            const formData = new FormData($('#edit-bank-form')[0]);
+
+            for (const pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+            debugger;
+
+            fetch(`/BankV2/EditBankWithMultipleBranch/${id}`,
+            {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success)
+                {
+                    $('#response-message').html('<div class="alert alert-success">' + data.message + '</div>');
+                    setTimeout(() => {
+                        window.location.href = '@Url.Action("Index", "BankV2")';
+                    }, 2000);
+                }
+
+                else 
+                {
+                    $('#response-message').html('<div class="alert alert-danger">' + data.message + '</div>');
+                }
+            })
+            .catch(error => {
+                $('#response-message').html('<div class="alert alert-danger">An error occurred: ' + error.message + '</div>');
+            });
+        });
+
+
+        $('#add-branch').click(function () {
+            const rowIndex = $('#branches-container tr').length;
+            const newRow = `
+                <tr>
+                    <td>
+                        <input type="hidden" name="Branches[${rowIndex}].BranchId" value="" />
+                        <input type="text" name="Branches[${rowIndex}].BranchName" class="form-control" required />
+                    </td>
+                    <td></td>
+                    <td>
+                        <input type="file" name="Branches[${rowIndex}].BranchLogo" class="form-control" />
+                    </td>
+                    <td>
+                        <select name="Branches[${rowIndex}].IsActive" class="form-control">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
+                </tr>`;
+            $('#branches-container').append(newRow);
+        });
+
+
+        $(document).on('click', '.remove-row', function () {
+            const branchId = $(this).data('branch-id');
+            if (branchId) {
+                deletedBranchIds.push(branchId);
+                $('#DeletedBranchIds').val(deletedBranchIds.join(','));
+            }
+            $(this).closest('tr').remove();
+            updateBranchRow();
+        });
+
+
+        function updateBranchRow() {
+            $('#branches-container tr').each(function (index) {
+                $(this).find('input, select').each(function () {
+                    const name = $(this).attr('name');
+                    if (name) {
+                        const newName = name.replace(/\[\d+\]/, `[${index}]`);
+                        $(this).attr('name', newName);
+                    }
+                });
+            });
+        }
+    });
 </script>

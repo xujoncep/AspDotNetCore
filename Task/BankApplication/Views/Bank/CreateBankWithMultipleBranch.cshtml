@@ -96,19 +96,59 @@
             $('#branches-container').append(newRow);
         });
 
+
         $(document).on('click', '.remove-row', function () {
             $(this).closest('tr').remove();
         });
 
+
         $('#submitForm').click(function (e) {
             e.preventDefault();
 
-            const formData = new FormData($('#bank-branch-form')[0]);
+            var formData = new FormData($('#bank-branch-form')[0]);
 
-             for (var pair of formData.entries()) {
+            // var formData = new FormData();
+
+            // formData.append('Bank.BankName', $('#BankName').val());
+            // formData.append('Bank.BankAddress', $('#BankAddress').val());
+            // formData.append('BankLogo', $('#Logo')[0].files[0]);
+
+        
+            // $('#branches-container tr').each(function (index) {
+            //     var branchName = $(this).find('input[name$="BranchName"]').val();
+            //     var branchLogo = $(this).find('input[name$="BranchLogo"]')[0].files[0];
+            //     var branchStatus = $(this).find('select[name$="IsActive"]').val();
+
+            //     formData.append(`Branches[${index}].BranchName`, branchName);
+            //     if (branchLogo) {
+            //         formData.append(`Branches[${index}].BranchLogo`, branchLogo);
+            //     }
+            //     formData.append(`Branches[${index}].IsActive`, branchStatus);
+            // });
+            
+            // var branchRows = $('#branches-container tr');
+
+            // for (var i = 0; i < branchRows.length; i++) {
+            //     var branchName = $(branchRows[i]).find('input[name="Branches[' + i + '].BranchName"]').val();
+            //     var branchLogo = $(branchRows[i]).find('input[name="Branches[' + i + '].BranchLogo')[0].files[0];
+            //     var isActive = $(branchRows[i]).find('select[name="Branches[' + i + '].IsActive"]').val();
+
+            //     formData.append('Branches[' + i + '].BranchName', branchName);
+            //     formData.append('Branches[' + i + '].BranchLogo', branchLogo);
+            //     formData.append('Branches[' + i + '].IsActive', isActive);
+            // }
+           
+
+            for (var pair of formData.entries()) 
+            {
                 console.log(pair[0] + ', ' + pair[1]);
             }
 
+            debugger;
+
+            
+
+            
             $.ajax({
                 url: '@Url.Action("CreateBankWithMultipleBranch", "Bank")',
                 method: 'POST',
@@ -130,5 +170,40 @@
                 }
             });
         });
+    });
+</script>
+
+
+<!--xmlHttpRequest Data posting -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#studentForm').submit(function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(this); 
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/Bank/CreateBankWithMultipleBranch/');
+
+            xhr.onload = function () {
+                if (xhr.status === 200)
+                {
+                    alert('Success: ' + xhr.responseText); 
+                } 
+                else 
+                {
+                    alert('Error: ' + xhr.status + ' - ' + xhr.statusText); 
+                }
+            };
+
+            xhr.onerror = function () 
+            {
+                alert('An error occurred while sending the request.');
+            };
+
+            xhr.send(formData); 
         });
+    });
 </script>

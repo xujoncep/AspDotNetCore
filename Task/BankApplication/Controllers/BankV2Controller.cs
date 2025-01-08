@@ -211,7 +211,7 @@ namespace BankApplication.Controllers
                     bank.Logo = $"/MyFile/images/{fileName}";
                 }
 
-                // Handle branch deletions
+                
                 if (string.IsNullOrEmpty(viewModel.DeletedBranchIds) == false)
                 {
                     var branchIdsToDelete = viewModel.DeletedBranchIds.Split(',').Select(int.Parse).ToList();
@@ -225,7 +225,7 @@ namespace BankApplication.Controllers
                     }
 
                     viewModel.Branches = viewModel.Branches
-                        .Where(b => b.BranchId != null && b.BranchId.HasValue && !branchIdsToDelete.Contains(b.BranchId.Value))
+                        .Where(b => b.BranchId == null || !viewModel.DeletedBranchIds.Split(',').Select(int.Parse).Contains(b.BranchId.Value))
                         .ToList();
 
                 }
