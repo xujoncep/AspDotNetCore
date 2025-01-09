@@ -23,7 +23,8 @@ namespace BankApplication.Data
            modelBuilder.Entity<Bank>()
                 .HasMany(b => b.Branches)
                 .WithOne(b => b.Bank)
-                .HasForeignKey(b => b.BankId);
+                .HasForeignKey(b => b.BankId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

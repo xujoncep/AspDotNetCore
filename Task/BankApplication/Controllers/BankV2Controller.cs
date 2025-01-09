@@ -39,17 +39,21 @@ namespace BankApplication.Controllers
             if (ModelState.IsValid == false)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                var errorMsg = "";
+               
                 foreach (var error in errors)
                 {
                     Console.WriteLine(error);
-                    errorMsg += error + "\n";
                 }
             }
 
             else
             {
-                string logo = null;
+                Bank bank = new Bank
+                {
+                    BankName = viewModel.Bank.BankName,
+                    BankAddress = viewModel.Bank.BankAddress,
+                    Branches = new List<Branch>()
+                };
 
                 if (viewModel.BankLogo != null)
                 {
@@ -67,20 +71,17 @@ namespace BankApplication.Controllers
                         await viewModel.BankLogo.CopyToAsync(stream);
                     }
 
-                    logo = $"/Myfile/images/{fileName}";
+                    bank.Logo = $"/Myfile/images/{fileName}";
                 }
-
-                Bank bank = new Bank
-                {
-                    BankName = viewModel.Bank.BankName,
-                    BankAddress = viewModel.Bank.BankAddress,
-                    Logo = logo,
-                    Branches = new List<Branch>()
-                };
 
                 foreach (var item in viewModel.Branches)
                 {
-                    string branchLogo = null;
+                    var branch = new Branch
+                    {
+                        BranchName = item.BranchName,
+                        IsActive = item.IsActive,
+                    };
+                    
                     if (item.BranchLogo != null)
                     {
                         string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
@@ -96,15 +97,8 @@ namespace BankApplication.Controllers
                             await item.BranchLogo.CopyToAsync(stream);
                         }
 
-                        branchLogo = $"/Myfile/images/{fileName}";
+                        branch.BranchLogo = $"/Myfile/images/{fileName}";
                     }
-
-                    var branch = new Branch
-                    {
-                        BranchName = item.BranchName,
-                        IsActive = item.IsActive,
-                        BranchLogo = branchLogo,
-                    };
 
                     bank.Branches.Add(branch);
                 }
@@ -163,11 +157,10 @@ namespace BankApplication.Controllers
             if (ModelState.IsValid == false)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                var errorMsg = "";
+                
                 foreach (var error in errors)
                 {
                     Console.WriteLine(error);
-                    errorMsg += error + "\n";
                 }
             }
 
@@ -272,8 +265,12 @@ namespace BankApplication.Controllers
 
                     else
                     {
-                        string branchLogo = null;
-
+                        var newBranch = new Branch
+                        {
+                            BranchName = branchVM.BranchName,
+                            IsActive = branchVM.IsActive,
+                        };
+                        
                         if (branchVM.BranchLogo != null)
                         {
                             string folder = Path.Combine(Directory.GetCurrentDirectory(), "MyFile", "images");
@@ -291,15 +288,8 @@ namespace BankApplication.Controllers
                                 await branchVM.BranchLogo.CopyToAsync(stream);
                             }
 
-                            branchLogo = $"/MyFile/images/{fileName}";
+                            newBranch.BranchLogo = $"/MyFile/images/{fileName}";
                         }
-
-                        var newBranch = new Branch
-                        {
-                            BranchName = branchVM.BranchName,
-                            IsActive = branchVM.IsActive,
-                            BranchLogo = branchLogo
-                        };
 
                         bank.Branches.Add(newBranch);
                     }
