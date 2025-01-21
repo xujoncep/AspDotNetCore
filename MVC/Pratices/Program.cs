@@ -31,7 +31,7 @@ namespace Pratices
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Collection}/{action=Index}/{id?}");
 
             app.Run();
         }
